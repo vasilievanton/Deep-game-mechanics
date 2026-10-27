@@ -5,6 +5,7 @@ import { BrandMark } from '@/components/ui/BrandMark';
 /** Секции, за которыми следит подсветка пункта меню. Служебные (не в меню) сбрасывают подсветку. */
 const navIds = navigation.map(([, href]) => href.slice(1));
 const watchedIds = [...navIds, 'configurator', 'analytics', 'contact'] as const;
+const watchedSelector = watchedIds.map((id) => `#${id}`).join(',');
 
 /** Ширина, с которой меню прячется в «бургер» (совпадает с media-запросом в clarity.css). */
 const COMPACT_MAX = 1080;
@@ -22,10 +23,12 @@ export default function SiteHeader() {
       frame = 0;
       const probe = Math.min(window.innerHeight * 0.4, 320);
       let current = '';
-      for (const id of watchedIds) {
-        const element = document.getElementById(id);
-        if (element && element.getBoundingClientRect().top <= probe) {
-          current = id;
+      // querySelectorAll отдаёт секции в порядке страницы, а не в порядке списка: блоки можно переставлять в index.astro
+      for (const element of document.querySelectorAll<HTMLElement>(
+        watchedSelector,
+      )) {
+        if (element.getBoundingClientRect().top <= probe) {
+          current = element.id;
         }
       }
       setActive(navIds.includes(current) ? current : '');
@@ -34,7 +37,9 @@ export default function SiteHeader() {
       const scrollable =
         document.documentElement.scrollHeight - window.innerHeight;
       const progress =
-        scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
+        scrollable > 0
+          ? Math.min(1, Math.max(0, window.scrollY / scrollable))
+          : 0;
       headerRef.current?.style.setProperty('--progress', progress.toFixed(4));
     }
     function schedule() {

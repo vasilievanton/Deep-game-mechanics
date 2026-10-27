@@ -127,7 +127,7 @@ export const audienceHeading = {
 /**
  * Пять типовых задач — они же фильтр в разделе «Кейсы» (`id` совпадает с `caseCategories`),
  * названия вкладок аналитики и варианты в конфигураторе. Шестая карточка — «своя механика».
- * Иллюстрации — public/images/audience/*.webp.
+ * Иллюстрации — public/images/audience/*-sharp.webp.
  */
 export const caseCategories = [
   {
@@ -135,7 +135,7 @@ export const caseCategories = [
     title: 'HR и внутриком',
     lead: 'Интерактивный сценарий для онбординга, обучения и вовлечения сотрудников.',
     tags: ['Онбординг', 'Обучение', 'Вовлечение', 'Корпоративные события'],
-    image: '/images/audience/hr.webp',
+    image: '/images/audience/hr-sharp.webp',
     accent: 'blue' as Accent,
   },
   {
@@ -148,7 +148,7 @@ export const caseCategories = [
       'Витрина наград',
       'Программы лояльности',
     ],
-    image: '/images/audience/platforms.webp',
+    image: '/images/audience/platforms-sharp.webp',
     accent: 'violet' as Accent,
   },
   {
@@ -161,7 +161,7 @@ export const caseCategories = [
       'Квизы и голосования',
       'Telegram web app',
     ],
-    image: '/images/audience/events.webp',
+    image: '/images/audience/events-sharp.webp',
     accent: 'cyan' as Accent,
   },
   {
@@ -174,7 +174,7 @@ export const caseCategories = [
       'Конкурсы',
       'Брендовые кампании',
     ],
-    image: '/images/audience/external.webp',
+    image: '/images/audience/external-sharp.webp',
     accent: 'coral' as Accent,
   },
   {
@@ -187,7 +187,7 @@ export const caseCategories = [
       'Призовой фонд',
       'Контроль кампании',
     ],
-    image: '/images/audience/trade.webp',
+    image: '/images/audience/trade-sharp.webp',
     accent: 'amber' as Accent,
   },
 ] as const;
@@ -582,14 +582,9 @@ export const customScenario = {
   title: 'Нестандартная задача',
   lead: 'Нужна механика, которой нет среди готовых? Придумаем правила, сценарий и визуал под вас.',
   tags: ['Свои правила', 'Свой визуал', 'Интеграции по задаче'],
-  image: '/images/audience/custom.webp',
+  image: '/images/audience/custom-sharp.webp',
   accent: 'green' as Accent,
 } as const;
-
-/** Чёткая версия иллюстрации (рядом лежит `<имя>-sharp.webp`): показывается при наведении на карточку. */
-export function sharpImage(image: string) {
-  return image.replace(/\.webp$/, '-sharp.webp');
-}
 
 export type AudienceCard = {
   id: string;

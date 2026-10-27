@@ -14,7 +14,6 @@
   --cv-ink: #ffffff;
   --cv-ink-2: rgba(255, 255, 255, 0.94);
   --cv-line: rgba(255, 255, 255, 0.42);
-  --cv-accent: #ffffff;
   --cv-chip-bg: #1d2023;
   --cv-chip-ink: #ffffff;
   --cv-chip-line: transparent;
@@ -40,7 +39,6 @@
   --cv-ink: #1d2023;
   --cv-ink-2: #454b54;
   --cv-line: rgba(29, 32, 35, 0.16);
-  --cv-accent: #d4000e;
   --cv-chip-bg: #ffffff;
   --cv-chip-ink: #1d2023;
   --cv-chip-line: rgba(29, 32, 35, 0.1);
@@ -66,7 +64,6 @@
   --cv-ink: #1f1f1f;
   --cv-ink-2: #2e2e2e;
   --cv-line: rgba(31, 31, 31, 0.3);
-  --cv-accent: #1f1f1f;
   --cv-chip-bg: #1f1f1f;
   --cv-chip-ink: #ffdd2d;
   --cv-chip-line: transparent;
@@ -91,7 +88,6 @@
   --cv-ink: #1c0a27;
   --cv-ink-2: #1c0a27;
   --cv-line: rgba(28, 10, 39, 0.34);
-  --cv-accent: #1c0a27;
   --cv-chip-bg: #731982;
   --cv-chip-ink: #ffffff;
   --cv-chip-line: transparent;
@@ -116,7 +112,6 @@
   --cv-ink: #ffffff;
   --cv-ink-2: rgba(255, 255, 255, 0.96);
   --cv-line: rgba(255, 255, 255, 0.45);
-  --cv-accent: #ffd84a;
   --cv-chip-bg: #16356b;
   --cv-chip-ink: #ffffff;
   --cv-chip-line: transparent;
@@ -141,7 +136,6 @@
   --cv-ink: #0f1115;
   --cv-ink-2: #434a55;
   --cv-line: rgba(15, 17, 21, 0.14);
-  --cv-accent: #d6001c;
   --cv-chip-bg: #ffffff;
   --cv-chip-ink: #0f1115;
   --cv-chip-line: rgba(15, 17, 21, 0.1);
@@ -387,20 +381,24 @@
   content: '';
   flex: 0 0 auto;
   align-self: center;
-  width: 9px;
-  height: 9px;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--deep-border);
   border-radius: 50%;
   background: var(--cv-swatch);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28);
 }
+/* выбранный проект — как выбранный чип: чёрная заливка, цвет бренда остаётся в точке */
 .case-switch__item.is-active[data-brand],
 span.case-switch__item[data-brand],
 span.case-switch__item[data-brand]:hover {
-  border-color: var(--cv-swatch);
-  background: color-mix(in srgb, var(--cv-swatch) 18%, transparent);
+  border-color: var(--deep-border);
+  background: #000;
+  color: #fff;
 }
-.case-switch__item[data-brand]:focus-visible {
-  outline-color: var(--cv-swatch);
+.case-switch__item.is-active[data-brand]::before,
+span.case-switch__item[data-brand]::before {
+  border-color: #fff;
 }
 
 /* ═════ 6. Страница /cases ═════ */

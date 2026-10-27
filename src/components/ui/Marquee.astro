@@ -1,0 +1,30 @@
+---
+import { mechanicsCatalog } from '@/data/landing';
+
+/**
+ * Чёрная бегущая строка над шапкой (как у Slush). Текст целиком из контента сайта: названия
+ * возможностей из «Механик» и фраза про срок запуска из конструктора и FAQ (с той же оговоркой
+ * «на готовых модулях») — своих обещаний здесь нет.
+ * Вторая копия списка нужна, чтобы лента замыкалась без шва; для скринридеров всё скрыто
+ * (дублирует каталог ниже). При prefers-reduced-motion лента не движется и перестраивается в строки.
+ */
+const items = [
+  ...mechanicsCatalog.map((item) => item.title),
+  'Запуск на готовых модулях — от 1 недели',
+];
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <ul class="marquee__group">
+      {items.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+    <ul class="marquee__group marquee__group--copy">
+      {items.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  </div>
+</div>

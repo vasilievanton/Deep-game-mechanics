@@ -1,21 +1,15 @@
 /* ───────────── Мерч-шоп: демо-витрина ─────────────
    Карточка «Попробуйте витрину» в панели механики «Мерч-шоп» и окно с условным магазином
    (MerchShopDemo): выбор товара, обмен баллов, остаток, лимит «в одни руки», список заказов.
-   Цвет — акцент механики (data-accent на панели и на .shop-demo), поэтому всё берёт --accent и
-   --accent-rgb. Общая подложка и панель окна (.dialog-*) лежат в forms.css, поэтому этот файл
-   подключается после него. Анимации включает html.motion-ok: без него и при
+   Цвет — акцент механики (data-accent на панели и на .shop-demo): им залиты плитки значков, выбранный
+   товар и монетка; текст везде чёрный. Общая подложка и панель окна (.dialog-*) лежат в forms.css,
+   поэтому этот файл подключается после него. Анимации включает html.motion-ok: без него и при
    prefers-reduced-motion всё появляется сразу. */
 
-/* цвет «вырезов» в иконках товаров: тёмный, с каплей акцента — как фон плитки под иконкой */
+/* цвет «вырезов» в значках товаров: тот же, что у плитки под значком (чёрный силуэт на цветной плитке) */
 .shop-launch-wrap,
 .shop-demo {
-  --shop-ink: #17131f;
-}
-@supports (color: color-mix(in srgb, red, blue)) {
-  .shop-launch-wrap,
-  .shop-demo {
-    --shop-ink: color-mix(in srgb, var(--accent) 14%, #0f0f10);
-  }
+  --shop-ink: var(--accent);
 }
 
 /* ───────────── Карточка-кнопка в панели «Мерч-шоп» ───────────── */
@@ -30,22 +24,19 @@
   width: 100%;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgb(var(--accent-rgb) / 0.4);
-  border-radius: 12px;
-  background: rgb(var(--accent-rgb) / 0.09);
+  border: 1px solid var(--deep-border);
+  border-radius: 18px;
+  background: #fff;
   color: var(--deep-text);
   text-align: left;
   cursor: pointer;
-  transition:
-    border-color 180ms ease,
-    background-color 180ms ease;
+  transition: background-color 160ms ease;
 }
 .shop-launch:hover {
-  border-color: var(--accent);
-  background: rgb(var(--accent-rgb) / 0.16);
+  background: var(--deep-sun);
 }
 .shop-launch:focus-visible {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 3px;
 }
 .shop-launch__glyphs {
@@ -57,10 +48,10 @@
   place-items: center;
   width: 38px;
   height: 38px;
-  border: 1px solid rgb(var(--accent-rgb) / 0.34);
-  border-radius: 10px;
-  background: rgb(var(--accent-rgb) / 0.14);
-  color: var(--accent);
+  border: 1px solid var(--deep-border);
+  border-radius: 12px;
+  background: var(--accent);
+  color: #000;
   transition: translate 220ms cubic-bezier(0.3, 1.5, 0.5, 1);
 }
 .shop-launch__tile svg {
@@ -73,32 +64,26 @@
   min-width: 0;
 }
 .shop-launch__copy strong {
-  font: 400 16px/1.25 var(--font-mono);
-  letter-spacing: -0.02em;
+  font: 700 16px/1.25 var(--font-ui);
+  letter-spacing: -0.01em;
 }
 .shop-launch__copy span {
   color: var(--deep-muted);
-  font: 400 13px/1.4 var(--font-text, var(--font-mono));
+  font: 500 13px/1.4 var(--font-text, var(--font-ui));
 }
 .shop-launch__go {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgb(var(--accent-rgb) / 0.22);
+  background: #000;
   color: #fff;
-  transition:
-    translate 200ms ease,
-    background-color 180ms ease;
+  transition: translate 200ms ease;
 }
 .shop-launch__go .arrow-icon {
   width: 18px;
   height: 18px;
-}
-.shop-launch:hover .shop-launch__go {
-  background: var(--accent);
-  color: #0f0f10;
 }
 html.motion-ok .shop-launch-wrap {
   animation: rise-sm 0.45s ease 0.12s backwards;
@@ -130,9 +115,9 @@ html.motion-ok .shop-launch-wrap {
   }
 }
 .shop-demo__kicker {
-  margin: 0 40px 6px 0;
-  color: var(--accent);
-  font: 600 11px/1.3 var(--font-text, var(--font-mono));
+  margin: 0 48px 8px 0;
+  color: var(--deep-text);
+  font: 700 11px/1.3 var(--font-text, var(--font-ui));
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -144,14 +129,14 @@ html.motion-ok .shop-launch-wrap {
   justify-content: space-between;
   gap: 12px;
   margin: 12px 0;
-  padding: 8px 16px;
-  border: 1px solid rgb(var(--accent-rgb) / 0.3);
-  border-radius: 12px;
-  background: rgb(var(--accent-rgb) / 0.08);
+  padding: 8px 18px;
+  border: 1px solid var(--deep-border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--accent) 28%, #fff);
 }
 .shop-demo__wallet-label {
-  color: var(--deep-text-soft);
-  font: 400 14px/1.3 var(--font-text, var(--font-mono));
+  color: var(--deep-text);
+  font: 700 14px/1.3 var(--font-text, var(--font-ui));
 }
 .shop-demo__wallet-value {
   position: relative;
@@ -160,9 +145,9 @@ html.motion-ok .shop-launch-wrap {
   gap: 9px;
 }
 .shop-demo__wallet-value strong {
-  color: #fff;
-  font: 400 24px/1.1 var(--font-mono);
-  letter-spacing: -0.04em;
+  color: var(--deep-text);
+  font: 900 34px/1 var(--font-display);
+  letter-spacing: 0;
 }
 /* «−280» всплывает слева от баланса и гаснет: layout не двигается */
 .shop-demo__delta {
@@ -170,9 +155,9 @@ html.motion-ok .shop-launch-wrap {
   top: 50%;
   right: calc(100% + 12px);
   translate: 0 -50%;
-  color: var(--c-coral);
-  font: 400 18px/1 var(--font-mono);
-  letter-spacing: -0.03em;
+  color: var(--deep-error);
+  font: 900 26px/1 var(--font-display);
+  letter-spacing: 0;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -204,29 +189,24 @@ html.motion-ok .shop-demo__delta {
   flex: none;
   width: 14px;
   height: 14px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--deep-border);
   border-radius: 50%;
-  background:
-    radial-gradient(
-      circle at 34% 30%,
-      rgb(255 255 255 / 0.55),
-      transparent 46%
-    ),
-    var(--accent);
-  box-shadow: 0 0 10px rgb(var(--accent-rgb) / 0.5);
+  background: var(--accent);
 }
 .shop-demo__coin::after {
   content: '';
   position: absolute;
-  inset: 3.5px;
-  border: 1.5px solid rgb(255 255 255 / 0.5);
+  inset: 2.5px;
+  border: 1.5px solid var(--deep-border);
   border-radius: 50%;
 }
 .shop-demo__coin--lg {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
 }
 .shop-demo__coin--lg::after {
-  inset: 5.5px;
+  inset: 4.5px;
 }
 
 /* ───────────── Витрина ───────────── */
@@ -265,13 +245,11 @@ html.motion-ok .shop-demo__delta {
   gap: 2px;
   height: 100%;
   padding: 10px 12px 12px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 12px;
-  background: var(--deep-canvas);
+  border: 1px solid var(--deep-border);
+  border-radius: 18px;
+  background: #fff;
   transition:
-    border-color 160ms ease,
     background-color 160ms ease,
-    box-shadow 200ms ease,
     translate 200ms ease;
 }
 /* верхняя строка: иконка слева, цена справа */
@@ -288,10 +266,10 @@ html.motion-ok .shop-demo__delta {
   flex: none;
   width: 44px;
   height: 44px;
-  border: 1px solid rgb(var(--accent-rgb) / 0.34);
-  border-radius: 12px;
-  background: rgb(var(--accent-rgb) / 0.14);
-  color: var(--accent);
+  border: 1px solid var(--deep-border);
+  border-radius: 14px;
+  background: var(--accent);
+  color: #000;
   transition: opacity 160ms ease;
 }
 .shop-demo__glyph svg {
@@ -303,9 +281,9 @@ html.motion-ok .shop-demo__delta {
   align-items: center;
   gap: 7px;
   padding-top: 4px;
-  color: #fff;
-  font: 400 18px/1 var(--font-mono);
-  letter-spacing: -0.03em;
+  color: var(--deep-text);
+  font: 900 24px/1 var(--font-display);
+  letter-spacing: 0;
 }
 /* вторая строка: название и кружок выбора */
 .shop-demo__title {
@@ -318,19 +296,25 @@ html.motion-ok .shop-demo__delta {
 .shop-demo__name {
   min-width: 0;
   color: var(--deep-text);
-  font: 400 17px/1.25 var(--font-mono);
-  letter-spacing: -0.02em;
+  font: 700 16px/1.25 var(--font-ui);
+  letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }
 .shop-demo__meta,
 .shop-demo__rule {
-  font: 400 13px/1.4 var(--font-text, var(--font-mono));
+  font: 500 13px/1.4 var(--font-text, var(--font-ui));
 }
 .shop-demo__meta {
   color: var(--deep-muted);
 }
+/* «мало»: чёрный жирный текст на жёлтой плашке (жёлтый как цвет текста на белом не читается) */
 .shop-demo__meta.is-low {
-  color: var(--c-amber);
+  justify-self: start;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--deep-sun);
+  color: var(--deep-text);
+  font-weight: 700;
 }
 .shop-demo__rule {
   color: var(--deep-muted);
@@ -345,11 +329,11 @@ html.motion-ok .shop-demo__delta {
   width: 22px;
   height: 22px;
   padding: 3px;
-  border: 2px solid #4a4c53;
+  border: 2px solid var(--deep-border);
   border-radius: 50%;
+  background: #fff;
   color: transparent;
   transition:
-    border-color 160ms ease,
     background-color 160ms ease,
     color 160ms ease;
 }
@@ -359,14 +343,7 @@ html.motion-ok .shop-demo__delta {
   .shop-demo__item[data-state='ok']
     input:not(:checked):hover
     + .shop-demo__card {
-    border-color: rgb(var(--accent-rgb) / 0.55);
-    background: var(--deep-surface-2);
-  }
-  .shop-demo__item[data-state='ok']
-    input:not(:checked):hover
-    + .shop-demo__card
-    .shop-demo__tick {
-    border-color: #6b6e77;
+    background: color-mix(in srgb, var(--accent) 28%, #fff);
   }
   html.motion-ok
     .shop-demo__item[data-state='ok']
@@ -376,31 +353,27 @@ html.motion-ok .shop-demo__delta {
   }
 }
 .shop-demo__item input:checked + .shop-demo__card {
-  border-color: var(--accent);
-  background: rgb(var(--accent-rgb) / 0.12);
-  box-shadow: 0 10px 30px rgb(var(--accent-rgb) / 0.16);
+  background: color-mix(in srgb, var(--accent) 45%, #fff);
 }
 .shop-demo__item input:checked + .shop-demo__card .shop-demo__tick {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #0f0f10;
+  background: #000;
+  color: #fff;
 }
 .shop-demo__item input:focus-visible + .shop-demo__card {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 2px;
 }
 
 /* нельзя взять: не хватает баллов, лимит, нет на складе */
 .shop-demo__item:not([data-state='ok']) .shop-demo__card {
-  border-color: var(--deep-border);
-  background: transparent;
+  border-color: rgb(0 0 0 / 0.35);
+  background: var(--deep-surface-2);
 }
 .shop-demo__item:not([data-state='ok']) .shop-demo__glyph {
   opacity: 0.5;
 }
 .shop-demo__item:not([data-state='ok']) .shop-demo__coin {
   opacity: 0.5;
-  box-shadow: none;
 }
 .shop-demo__item:not([data-state='ok']) .shop-demo__name,
 .shop-demo__item:not([data-state='ok']) .shop-demo__price {
@@ -410,10 +383,12 @@ html.motion-ok .shop-demo__delta {
   display: none;
 }
 .shop-demo__item[data-state='short'] .shop-demo__rule {
-  color: var(--c-coral);
+  color: var(--deep-error);
+  font-weight: 700;
 }
 .shop-demo__item[data-state='limit'] .shop-demo__rule {
-  color: var(--c-amber);
+  color: var(--deep-text);
+  font-weight: 700;
 }
 
 /* ───────────── Действие: подсказка и кнопка ───────────── */
@@ -429,10 +404,11 @@ html.motion-ok .shop-demo__delta {
   min-width: 0;
   margin: 0;
   color: var(--deep-text-soft);
-  font: 400 14px/1.45 var(--font-text, var(--font-mono));
+  font: 500 14px/1.45 var(--font-text, var(--font-ui));
 }
 .shop-demo__hint.is-done {
-  color: var(--c-green);
+  color: var(--deep-text);
+  font-weight: 700;
 }
 .shop-demo__buy {
   display: inline-flex;
@@ -442,16 +418,16 @@ html.motion-ok .shop-demo__delta {
   min-width: 190px;
   min-height: 52px;
   margin: 0;
-  padding: 12px 22px;
-  border: 1px solid transparent;
+  padding: 12px 24px;
+  border: 1px solid var(--deep-border);
   border-radius: var(--deep-radius-btn);
   background: var(--deep-primary);
   color: #fff;
-  font: 350 17px/1.25 var(--font-mono);
+  font: 700 13.5px/1.25 var(--font-ui);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition:
-    background-color 160ms ease,
-    opacity 160ms ease;
+  transition: background-color 160ms ease;
 }
 .shop-demo__buy:hover {
   background: var(--deep-primary-hover);
@@ -460,14 +436,15 @@ html.motion-ok .shop-demo__delta {
   background: var(--deep-primary-press);
 }
 .shop-demo__buy:focus-visible {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 3px;
 }
 /* неактивная кнопка остаётся фокусируемой (aria-disabled), поэтому приглушаем цвета, а не opacity:
    иначе кольцо фокуса на ней тоже бледнеет */
-.shop-demo__buy[aria-disabled='true'] {
-  background: #0c235b;
-  color: #8f94a3;
+.shop-demo__buy[aria-disabled='true'],
+.shop-demo__buy[aria-disabled='true']:hover {
+  background: var(--deep-mist);
+  color: var(--deep-muted);
   cursor: not-allowed;
 }
 
@@ -475,7 +452,7 @@ html.motion-ok .shop-demo__delta {
 .shop-demo__orders {
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid var(--deep-border-2);
+  border-top: 1px solid var(--deep-hairline);
 }
 .shop-demo__orders-head {
   display: flex;
@@ -486,8 +463,8 @@ html.motion-ok .shop-demo__delta {
 }
 .shop-demo__orders-title {
   margin: 0;
-  color: var(--deep-muted);
-  font: 600 11px/1.3 var(--font-text, var(--font-mono));
+  color: var(--deep-text);
+  font: 700 11px/1.3 var(--font-text, var(--font-ui));
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -498,21 +475,23 @@ html.motion-ok .shop-demo__delta {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--deep-link);
-  font: 400 13px/1.3 var(--font-text, var(--font-mono));
+  color: var(--deep-text);
+  font: 700 13px/1.3 var(--font-text, var(--font-ui));
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
   transition: color 160ms ease;
 }
 .shop-demo__reset:hover {
-  color: #fff;
+  color: var(--deep-violet);
 }
 .shop-demo__reset:focus-visible {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 2px;
 }
 .shop-demo__reset[aria-disabled='true'],
 .shop-demo__reset[aria-disabled='true']:hover {
-  color: rgb(108 149 255 / 0.45);
+  color: #767676;
   cursor: default;
 }
 .shop-demo__list {
@@ -528,10 +507,10 @@ html.motion-ok .shop-demo__delta {
   align-items: center;
   min-height: 36px;
   padding: 0 14px;
-  border: 1px dashed var(--deep-border-2);
-  border-radius: 10px;
+  border: 1px dashed rgb(0 0 0 / 0.45);
+  border-radius: 14px;
   color: var(--deep-muted);
-  font: 400 13px/1.4 var(--font-text, var(--font-mono));
+  font: 500 13px/1.4 var(--font-text, var(--font-ui));
 }
 .shop-demo__order {
   display: grid;
@@ -540,9 +519,9 @@ html.motion-ok .shop-demo__delta {
   gap: 12px;
   min-height: 36px;
   padding: 0 14px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 10px;
-  background: var(--deep-canvas);
+  border: 1px solid var(--deep-border);
+  border-radius: 14px;
+  background: #fff;
 }
 html.motion-ok .shop-demo__order {
   animation: rise-sm 0.35s ease both;
@@ -550,33 +529,35 @@ html.motion-ok .shop-demo__order {
 .shop-demo__order-name {
   min-width: 0;
   color: var(--deep-text);
-  font: 400 15px/1.3 var(--font-mono);
-  letter-spacing: -0.02em;
+  font: 700 15px/1.3 var(--font-ui);
+  letter-spacing: -0.01em;
 }
 .shop-demo__status {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--c-green);
-  font: 400 12px/1.2 var(--font-text, var(--font-mono));
+  color: var(--deep-text);
+  font: 600 12px/1.2 var(--font-text, var(--font-ui));
 }
 .shop-demo__status::before {
   content: '';
-  width: 6px;
-  height: 6px;
+  width: 9px;
+  height: 9px;
+  box-sizing: border-box;
+  border: 1px solid var(--deep-border);
   border-radius: 50%;
-  background: currentColor;
+  background: var(--deep-mint);
 }
 .shop-demo__order-sum {
   min-width: 52px;
-  color: var(--deep-text-soft);
-  font: 400 15px/1.3 var(--font-mono);
+  color: var(--deep-text);
+  font: 900 20px/1 var(--font-display);
   text-align: right;
 }
 .shop-demo__note {
   margin: 10px 0 0;
   color: var(--deep-muted);
-  font: 400 12px/1.5 var(--font-text, var(--font-mono));
+  font: 500 12px/1.5 var(--font-text, var(--font-ui));
 }
 
 /* ───────────── Телефон ───────────── */

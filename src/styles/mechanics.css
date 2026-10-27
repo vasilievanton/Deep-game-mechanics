@@ -1,9 +1,86 @@
 /* ───────────── Механики и возможности ─────────────
-   Компактный каталог: слева 2 × 4 плитки (иконка, название, короткая фраза), справа панель выбранной
+   Компактный каталог: слева 2 × 4 плитки (значок, название, короткая фраза), справа панель выбранной
    возможности. Плитки всегда одной высоты и не прыгают при выборе; панель вытягивается до низа плиток
-   (а если её текст длиннее — до своего низа). Иконка в плитке — два слоя (мягкий в покое, чёткий при наведении, см. motion.css),
-   в панели — один. Цвет иконки и подписей берётся из data-accent (accent.css).
-   Заголовок раздела и кнопка «Протестируйте механики» лежат в global.css и forms.css. */
+   (а если её текст длиннее — до своего низа).
+   Цвет выбранной механики (data-accent, см. accent.css) красит и плитку, и панель: так видно, что справа —
+   описание именно этой плитки. В покое плитка белая, при наведении — бледный оттенок цвета механики.
+   Значки — плоские картинки на белых плашках-наклейках с чёрным контуром: цвет плитки не спорит с цветом значка. */
+
+.mechanics__heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 40px;
+  margin-bottom: clamp(28px, 3.4vw, 44px);
+}
+.mechanics__heading .section-lead {
+  max-width: 640px;
+  margin: 20px 0 0;
+}
+
+/* кнопка «Протестируйте механики»: пилюля и наклейка «Тест из 3 вопросов» на её углу */
+.mechanics__try {
+  position: relative;
+  flex: 0 0 auto;
+  margin: 0 10px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.mechanics__try-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 10px 26px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: var(--deep-primary);
+  font: 700 13.5px / 1.2 var(--font-ui);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease;
+}
+.mechanics__try-arrow {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+.mechanics__try-note {
+  position: absolute;
+  top: -15px;
+  right: -12px;
+  padding: 4px 11px 5px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: var(--deep-sun);
+  color: var(--deep-text);
+  font: 700 11px / 1.2 var(--font-ui);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  rotate: 5deg;
+  transition: rotate 200ms ease;
+}
+.mechanics__try:hover .mechanics__try-label {
+  background: var(--deep-primary-hover);
+}
+.mechanics__try:hover .mechanics__try-note {
+  rotate: -2deg;
+}
+.mechanics__try:active .mechanics__try-label {
+  background: var(--deep-primary-press);
+}
+.mechanics__try:focus-visible {
+  outline: none;
+}
+.mechanics__try:focus-visible .mechanics__try-label {
+  outline: 3px solid var(--deep-focus);
+  outline-offset: 3px;
+}
 
 .mechanics__layout {
   display: grid;
@@ -19,30 +96,33 @@
   align-self: start;
 }
 
-/* иконка механики: два слоя в плитке, один в панели и в результате теста */
+/* значок механики: плашка-наклейка; в плитке, в панели и в результате теста */
 .mechanic-art {
   position: relative;
-  display: block;
+  display: grid;
   width: 56px;
   height: 56px;
   flex: 0 0 56px;
+  place-items: center;
+  padding: 8px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-tile);
+  background: #fff;
+  rotate: var(--tilt, 0deg);
 }
 .mechanic-art img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: none;
-}
-.mechanic-art__sharp {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
 }
 .mechanic-art--detail {
-  width: 64px;
-  height: 64px;
-  flex-basis: 64px;
+  --tilt: -4deg;
+  width: 76px;
+  height: 76px;
+  flex-basis: 76px;
+  padding: 11px;
+  border-radius: 22px;
 }
 
 /* ───── Плитка ───── */
@@ -51,7 +131,7 @@
   min-width: 0;
   align-items: center;
   gap: 14px;
-  padding: 14px 16px 14px 12px;
+  padding: 14px 16px 14px 14px;
   border: 1px solid var(--deep-border);
   border-radius: var(--deep-radius-card);
   background: var(--deep-surface);
@@ -59,16 +139,15 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition:
-    transform 180ms ease,
-    border-color 180ms ease,
-    background-color 180ms ease,
-    box-shadow 180ms ease;
+  transition: background-color 160ms ease;
 }
-.mechanic-card .mechanic-art {
-  width: 52px;
-  height: 52px;
-  flex-basis: 52px;
+.mechanic-card:nth-child(4n + 1),
+.mechanic-card:nth-child(4n + 4) {
+  --tilt: -3deg;
+}
+.mechanic-card:nth-child(4n + 2),
+.mechanic-card:nth-child(4n + 3) {
+  --tilt: 2.5deg;
 }
 .mechanic-card__top {
   display: block;
@@ -81,93 +160,84 @@
 }
 .mechanic-card strong {
   color: inherit;
-  font: 500 15.5px / 1.25 var(--font-mono);
-  letter-spacing: -0.02em;
+  font: 700 16px / 1.2 var(--font-ui);
+  letter-spacing: -0.01em;
 }
 .mechanic-card__description {
   display: -webkit-box;
   overflow: hidden;
   color: var(--deep-muted);
-  font: 400 13px / 1.4 var(--font-text);
+  font: 500 13px / 1.4 var(--font-ui);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 .mechanic-card:hover {
-  border-color: var(--deep-border-2);
-  background: var(--deep-surface-2);
-  transform: translateY(-2px);
-}
-.mechanic-card:not(.is-active):hover {
-  border-color: rgb(var(--accent-rgb) / 0.4);
-  box-shadow: 0 14px 34px rgb(var(--accent-rgb) / 0.12);
-}
-.mechanic-card:active {
-  transform: scale(0.985);
+  background: color-mix(in srgb, var(--accent) 26%, #fff);
 }
 .mechanic-card:focus-visible {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 3px;
 }
-.mechanic-card.is-active {
-  border-color: rgba(150, 180, 255, 0.5);
-  background: linear-gradient(145deg, #0c2680 0%, #0037c2 65%, #1a5bff 130%);
-  box-shadow: 0 18px 44px rgba(0, 55, 194, 0.32);
+.mechanic-card.is-active,
+.mechanic-card.is-active:hover {
+  background: var(--accent);
+  color: var(--accent-on);
 }
 .mechanic-card.is-active .mechanic-card__description {
-  color: rgba(255, 255, 255, 0.88);
+  color: inherit;
 }
 
 /* ───── Панель выбранной возможности ───── */
 .mechanic-detail {
+  --rule: color-mix(in srgb, var(--accent-on) 28%, transparent);
   display: flex;
   min-width: 0;
   flex-direction: column;
-  padding: 26px 28px 28px;
+  padding: 28px 30px 30px;
   border: 1px solid var(--deep-border);
-  border-radius: var(--deep-radius-card);
-  background: var(--deep-surface);
+  border-radius: var(--deep-radius-panel);
+  background: var(--accent);
+  color: var(--accent-on);
+  transition: background-color 200ms ease;
 }
 .mechanic-detail__head {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 18px;
 }
 .mechanic-detail__head h3 {
-  margin: 0;
-  font: 400 22px / 1.2 var(--font-mono);
-  letter-spacing: -0.03em;
+  margin: 4px 0 0;
+  font: 900 clamp(32px, 3.2vw, 44px) / 0.95 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
 }
 .mechanic-detail__head p {
-  margin: 8px 0 0;
-  color: var(--deep-muted);
-  font: 400 14.5px / 1.5 var(--font-text);
+  margin: 12px 0 0;
+  font: 500 15px / 1.5 var(--font-ui);
 }
 .mechanic-detail__body {
   display: flex;
   flex: 1;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 22px;
 }
 .mechanic-detail__label {
-  color: var(--deep-link);
-  font: 600 12px / 1.2 var(--font-mono);
-  letter-spacing: 0.04em;
+  font: 700 12px / 1.2 var(--font-ui);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-}
-.mechanic-detail[data-accent] .mechanic-detail__label {
-  color: var(--accent);
 }
 .mechanic-detail__body ul {
   display: grid;
   gap: 0;
-  margin: 8px 0 22px;
+  margin: 8px 0 24px;
   padding: 0;
   list-style: none;
 }
 .mechanic-detail__body li {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--deep-border);
-  font: 400 14.5px / 1.4 var(--font-text);
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule);
+  font: 500 14.5px / 1.4 var(--font-ui);
 }
 .mechanic-detail__body li:last-child {
   border-bottom: 0;
@@ -188,6 +258,11 @@
   margin-top: auto;
   align-self: flex-start;
 }
+/* на цветной панели кнопка при наведении белеет (фиолетовая заливка слилась бы с фиолетовой панелью) */
+.mechanic-detail .arrow-button:hover {
+  background: #fff;
+  color: var(--deep-text);
+}
 
 /* ───── Ширины ───── */
 @media (max-width: 1099px) {
@@ -198,44 +273,51 @@
     grid-auto-rows: auto;
   }
 }
+@media (max-width: 800px) {
+  .mechanics__heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .mechanics__try {
+    margin-top: 6px;
+  }
+}
 @media (max-width: 600px) {
   .mechanics__grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
   }
   .mechanic-card {
-    padding: 12px 14px 12px 10px;
+    padding: 12px 14px 12px 12px;
   }
   .mechanic-card .mechanic-art {
-    width: 46px;
-    height: 46px;
-    flex-basis: 46px;
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    padding: 7px;
   }
   .mechanic-detail {
-    padding: 22px 18px 22px;
+    padding: 22px 18px 24px;
   }
   .mechanic-detail__body ul.is-wide {
     grid-template-columns: minmax(0, 1fr);
   }
   .mechanic-detail__body ul.is-wide li:nth-last-child(2):nth-child(odd) {
-    border-bottom: 1px solid var(--deep-border);
-  }
-  .mechanic-detail__head h3 {
-    font-size: 20px;
+    border-bottom: 1px solid var(--rule);
   }
   .mechanic-art--detail {
-    width: 54px;
-    height: 54px;
-    flex-basis: 54px;
+    width: 60px;
+    height: 60px;
+    flex-basis: 60px;
+    padding: 9px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mechanic-card {
+  .mechanics__try-label,
+  .mechanics__try-note,
+  .mechanic-card,
+  .mechanic-detail {
     transition: none;
-  }
-  .mechanic-card:hover,
-  .mechanic-card:active {
-    transform: none;
   }
 }

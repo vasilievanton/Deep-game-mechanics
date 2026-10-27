@@ -1,6 +1,6 @@
 /**
  * Логотип deep — тот же знак, что на deep-agency.ru (deep-logo-compact.svg),
- * подпись набрана живым текстом шрифтом Cascadia Mono.
+ * подпись набрана живым текстом (Inter). Цвет знака — currentColor: чёрный на светлом, белый в подвале.
  */
 export function BrandMark({ className = '' }: { className?: string }) {
   return (

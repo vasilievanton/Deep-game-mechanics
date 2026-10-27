@@ -2,7 +2,6 @@ import {
   audienceCards,
   audienceHeading,
   featuredCaseForCategory,
-  sharpImage,
 } from '@/data/landing';
 import { IconTile } from '@/components/ui/IconTile';
 import { ArrowIcon } from '@/components/ui/ArrowIcon';
@@ -34,7 +33,7 @@ export default function Audience() {
               className="audience-card"
               key={item.id}
               data-accent={item.accent}
-              data-spot
+              data-stagger
               data-reveal
               style={cssVars({ '--i': index })}
             >
@@ -73,20 +72,9 @@ export default function Audience() {
                   <ArrowIcon direction="right" />
                 </span>
               </div>
-              {/* два слоя: мягкая иллюстрация в покое и чёткая при наведении на карточку */}
               <span className="audience-card__art" aria-hidden="true">
                 <img
-                  className="audience-card__art-soft"
                   src={item.image}
-                  alt=""
-                  width={512}
-                  height={512}
-                  loading="lazy"
-                  decoding="async"
-                />
-                <img
-                  className="audience-card__art-sharp"
-                  src={sharpImage(item.image)}
                   alt=""
                   width={512}
                   height={512}

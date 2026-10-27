@@ -373,7 +373,7 @@ export function Card({
       className={`dash-card dash-widget ${className}`.trim()}
       data-cap={cap}
       data-w={w}
-      data-spot
+      data-stagger
     >
       <header className="dash-card__head">
         <h3>{title}</h3>
@@ -466,7 +466,7 @@ export function Kpi({
       className="dash-card dash-kpi"
       data-cap={data.cap}
       data-w={w}
-      data-spot
+      data-stagger
     >
       <span className="dash-kpi__label">{data.label}</span>
       <div className="dash-kpi__line">

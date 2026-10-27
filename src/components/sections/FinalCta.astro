@@ -16,15 +16,20 @@ const { configuratorHref = '#configurator' } = Astro.props;
   aria-labelledby="final-cta-heading"
 >
   <div class="final-cta__inner" data-reveal>
-    <img
-      class="final-cta__art"
-      src="/images/audience/game.webp"
-      alt=""
-      width="512"
-      height="512"
-      loading="lazy"
-      decoding="async"
-    />
+    <div class="final-cta__art" aria-hidden="true">
+      {['quiz', 'trophy', 'gift'].map((name) => (
+        <span class={`sticker sticker--${name}`}>
+          <img
+            src={`/images/mechanics/${name}-sharp.webp`}
+            alt=""
+            width="256"
+            height="256"
+            loading="lazy"
+            decoding="async"
+          />
+        </span>
+      ))}
+    </div>
     <h2 id="final-cta-heading">
       {finalCta.title} <span>{finalCta.accent}</span>
     </h2>

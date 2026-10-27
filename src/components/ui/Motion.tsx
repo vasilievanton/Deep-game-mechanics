@@ -1,18 +1,17 @@
 import { useEffect } from 'react';
 
 /**
- * Лёгкий слой «живости» страницы. Компонент ничего не рисует, а подключает две вещи:
+ * Лёгкий слой «живости» страницы. Компонент ничего не рисует, а подключает появление блоков при прокрутке.
  *
- * 1. Появление при прокрутке. Блоки с атрибутом `data-reveal` прячутся и перед попаданием в экран
- *    получают `data-in` — дальше работают CSS-анимации (motion.css). Срабатывает с запасом
- *    (`LEAD`): блок начинает проявляться, пока он ещё ниже края экрана, и при обычной прокрутке
- *    пользователь не видит пустых мест. Если листают быстро (рывок трекпада, переход по якорю) или
- *    блок к моменту срабатывания уже на экране, он появляется сразу, без плавного входа: иначе
- *    контент «догоняет» взгляд. Задержка-«лесенка» есть только у карточек в одном ряду (`data-spot`),
- *    у заголовков, панелей и списков её нет.
- *    Состояние хранится в атрибутах, а не в классах: React перерисовывает className и затёр бы его.
- *    Блоки, которые уже на экране при старте, не прячутся вовсе (без вспышки).
- * 2. Подсветка под курсором. Карточки с `data-spot` получают `--mx/--my` — центр свечения.
+ * Блоки с атрибутом `data-reveal` прячутся и перед попаданием в экран
+ * получают `data-in` — дальше работают CSS-анимации (motion.css). Срабатывает с запасом
+ * (`LEAD`): блок начинает проявляться, пока он ещё ниже края экрана, и при обычной прокрутке
+ * пользователь не видит пустых мест. Если листают быстро (рывок трекпада, переход по якорю) или
+ * блок к моменту срабатывания уже на экране, он появляется сразу, без плавного входа: иначе
+ * контент «догоняет» взгляд. Задержка-«лесенка» есть только у карточек в одном ряду (`data-stagger`),
+ * у заголовков, панелей и списков её нет.
+ * Состояние хранится в атрибутах, а не в классах: React перерисовывает className и затёр бы его.
+ * Блоки, которые уже на экране при старте, не прячутся вовсе (без вспышки).
  *
  * Если анимации выключены в системе (нет класса `motion-ok` на <html>), ничего не происходит
  * и вся страница остаётся статичной и полностью видимой.
@@ -89,7 +88,7 @@ export default function Motion() {
           let inRow = 0;
           for (const entry of entering) {
             let delay = 0;
-            if (entry.target.hasAttribute('data-spot')) {
+            if (entry.target.hasAttribute('data-stagger')) {
               const top = entry.boundingClientRect.top;
               if (Math.abs(top - rowTop) > 24) {
                 rowTop = top;
@@ -143,34 +142,6 @@ export default function Motion() {
         document.removeEventListener('focusin', onFocusIn);
         window.clearTimeout(sweep);
         root.classList.remove('motion-live');
-      });
-    }
-
-    // ───── подсветка под курсором ─────
-    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-    if (fine.matches) {
-      let frame = 0;
-      let last: PointerEvent | null = null;
-      const onMove = (event: PointerEvent) => {
-        if (event.pointerType !== 'mouse') return;
-        last = event;
-        if (frame) return;
-        frame = window.requestAnimationFrame(() => {
-          frame = 0;
-          const pointer = last;
-          const spot = (pointer?.target as Element | null)?.closest?.(
-            '[data-spot]',
-          ) as HTMLElement | null;
-          if (!pointer || !spot) return;
-          const rect = spot.getBoundingClientRect();
-          spot.style.setProperty('--mx', `${pointer.clientX - rect.left}px`);
-          spot.style.setProperty('--my', `${pointer.clientY - rect.top}px`);
-        });
-      };
-      document.addEventListener('pointermove', onMove, { passive: true });
-      cleanups.push(() => {
-        document.removeEventListener('pointermove', onMove);
-        if (frame) window.cancelAnimationFrame(frame);
       });
     }
 

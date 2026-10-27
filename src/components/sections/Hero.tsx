@@ -8,6 +8,9 @@ import { ArrowButton } from '@/components/ui/ArrowButton';
 import { HeroCarousel } from '@/components/sections/HeroCarousel';
 import { cssVars } from '@/lib/css-vars';
 
+/** Наклейки вокруг заголовка — значки тех же механик, что в разделе «Возможности» (чёткие версии). */
+const stickers = ['quiz', 'trophy', 'gift', 'receipt'] as const;
+
 export default function Hero() {
   return (
     <section className="hero" id="top" aria-labelledby="hero-title">
@@ -16,10 +19,24 @@ export default function Hero() {
       </div>
       <div className="hero__body">
         <div className="hero__content">
-          <h1 id="hero-title">
-            <span>{heroTitle.accent}</span>
-            {heroTitle.rest}
-          </h1>
+          <div className="hero__title">
+            <div className="hero__stickers" aria-hidden="true">
+              {stickers.map((name) => (
+                <span className={`sticker sticker--${name}`} key={name}>
+                  <img
+                    src={`/images/mechanics/${name}-sharp.webp`}
+                    alt=""
+                    width="256"
+                    height="256"
+                  />
+                </span>
+              ))}
+            </div>
+            <h1 id="hero-title">
+              <span>{heroTitle.accent}</span>
+              {heroTitle.rest}
+            </h1>
+          </div>
           <p>
             {heroSubtitle.map((line) => (
               <span className="hero__line" key={line}>

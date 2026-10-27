@@ -19,7 +19,7 @@ export default function FAQ() {
     >
       <header className="faq__heading" data-reveal>
         <h2 className="section-title" id="faq-heading">
-          FAQ
+          <span>FAQ</span>
         </h2>
         <p className="section-lead">
           Коротко о том, как устроена работа с платформой

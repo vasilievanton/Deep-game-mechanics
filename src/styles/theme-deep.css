@@ -1,49 +1,79 @@
 /*
- * Тема «как на deep-agency.ru».
+ * Тема в стиле Slush (styles.refero.design/style/8b6b547f-a357-4f1b-9842-4579c62dd42b).
  *
- * Подключается после global.css и переопределяет оформление, не трогая вёрстку:
- * структура, сетки и тексты остаются прежними. Чтобы вернуть прежний светлый вид,
- * достаточно убрать импорт этого файла в src/layouts/BaseLayout.astro.
+ * Светлая, плоская, без теней и градиентов: цветные полосы-секции, чёрные контуры в 1px,
+ * плашки-«наклейки» палитры, узкие жирные заголовки капсом и пилюли вместо прямоугольных кнопок.
+ * Глубину задают не тени, а цвет полос и контур.
  *
- * Токены сняты с основного сайта:
- *   фон #0f0f10, текст #fafafa, акцент #0037c2 (hsl 223 100% 38%),
- *   рамки #1d1e20 / #2c2d30, шрифт Cascadia Mono, кнопки radius 16px, карточки radius 8px.
+ * Подключается после global.css и переопределяет его оформление, не трогая вёрстку: структура, сетки
+ * и тексты остаются прежними. Остальные файлы (showcase, mechanics, analytics, …) берут цвета отсюда,
+ * из переменных --deep-*; акценты задач (--accent) лежат в accent.css.
+ *
+ * Правила палитры:
+ *   · чёрный (#000) — текст, контуры и заливка главной кнопки; белый — карточки;
+ *   · цвета-наклейки (--deep-blue, -mint, -lavender, -ember, -sun, -violet) — только заливки и плашки,
+ *     не цвет текста на светлом и не цвет ссылок; синий — не кнопка;
+ *   · на фиолетовом (--deep-violet) текст белый, на остальных заливках — чёрный.
  */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  --deep-canvas: #0f0f10;
-  --deep-surface: rgba(255, 255, 255, 0.025);
-  --deep-surface-2: rgba(255, 255, 255, 0.05);
-  --deep-border: #1d1e20;
-  --deep-border-2: #2c2d30;
-  --deep-text: #fafafa;
-  --deep-text-soft: #e0e0e0;
-  --deep-muted: #a0a5b1;
-  --deep-muted-2: #777a83;
-  --deep-primary: #0037c2;
-  --deep-primary-hover: #0041e0;
-  --deep-primary-press: #002a96;
-  --deep-primary-deep: #001a5c;
-  --deep-tint: #141d34;
-  --deep-link: #6c95ff;
-  --deep-glow: rgba(0, 62, 224, 0.22);
-  --deep-radius-btn: 16px;
-  --deep-radius-card: 8px;
+  /* палитра */
+  --deep-canvas: #fff;
+  --deep-sky: #dceeff;
+  --deep-concrete: #ccc;
+  --deep-mist: #e9e9e9;
+  --deep-blue: #4da2ff;
+  --deep-mint: #55db9c;
+  --deep-lavender: #e9ccff;
+  --deep-ember: #fb4903;
+  --deep-sun: #ffd731;
+  --deep-violet: #5c4ade;
+
+  /* роли */
+  --deep-surface: #fff;
+  --deep-surface-2: #f3f3f3;
+  --deep-border: #000;
+  --deep-hairline: rgb(0 0 0 / 0.16);
+  --deep-text: #000;
+  --deep-text-soft: #1c1c1c;
+  --deep-muted: #4b4b4b;
+  --deep-muted-2: #565656;
+  --deep-primary: #000;
+  --deep-primary-hover: var(--deep-violet);
+  --deep-primary-press: #3b2fa8;
+  --deep-link: #000;
+  --deep-focus: var(--deep-violet);
+  --deep-error: #b42800; /* текст ошибки на белом (чистый --deep-ember на белом контрастнее 3:1, но не 4,5:1) */
+  --deep-radius-btn: 999px;
+  --deep-radius-card: 20px;
+  --deep-radius-panel: 32px;
+  --deep-radius-tile: 16px;
+
+  /* шрифты: заголовки — узкий жирный гротеск, всё остальное — Inter */
+  --font-ui:
+    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  --font-display:
+    'Sofia Sans Extra Condensed', 'Arial Narrow', 'Helvetica Neue', Impact,
+    sans-serif;
+
+  /* ритм: отступ секции сверху и снизу, размер заголовка секции */
+  --band-pad: clamp(56px, 7vw, 104px);
+  --title-size: clamp(48px, 6.6vw, 104px);
 
   /* прежние токены global.css перенаправлены на новую палитру */
-  --blue: var(--deep-primary);
-  --blue-light: var(--deep-link);
+  --blue: var(--deep-text);
   --navy: var(--deep-text);
   --muted: var(--deep-muted);
   --pale: var(--deep-surface-2);
-  --line: var(--deep-border);
+  --line: var(--deep-hairline);
 
   color: var(--deep-text);
   background: var(--deep-canvas);
-  font-family: var(--font-mono);
-  font-weight: 350;
+  font-family: var(--font-ui);
+  font-weight: 500;
 }
 
 html {
@@ -53,12 +83,13 @@ html {
 body {
   background: var(--deep-canvas);
   color: var(--deep-text);
-  font-family: var(--font-mono);
-  font-weight: 350;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 ::selection {
-  background: var(--deep-primary);
+  background: var(--deep-violet);
   color: #fff;
 }
 
@@ -75,20 +106,182 @@ body {
   aspect-ratio: 69 / 30;
 }
 .brand-mark small {
-  font: 600 11.5px/1 var(--font-mono);
-  letter-spacing: 0;
-  text-transform: none;
+  font: 700 10px/1 var(--font-ui);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   opacity: 1;
   white-space: nowrap;
 }
 
-/* ───────────── Шапка ───────────── */
+/* ───────────── Бегущая строка над шапкой ───────────── */
+.marquee {
+  position: relative;
+  z-index: 61;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+}
+.marquee__group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.marquee__group li {
+  display: inline-flex;
+  align-items: center;
+  padding-block: 11px 10px;
+  font: 700 12px/1 var(--font-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* между пунктами — маленькая наклейка цвета палитры */
+.marquee__group li::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  margin-inline: 28px;
+  border-radius: 3px;
+  background: var(--sep, var(--deep-sun));
+  rotate: 45deg;
+}
+.marquee__group li:nth-child(6n + 1) {
+  --sep: var(--deep-sun);
+}
+.marquee__group li:nth-child(6n + 2) {
+  --sep: var(--deep-mint);
+}
+.marquee__group li:nth-child(6n + 3) {
+  --sep: var(--deep-blue);
+}
+.marquee__group li:nth-child(6n + 4) {
+  --sep: var(--deep-lavender);
+}
+.marquee__group li:nth-child(6n + 5) {
+  --sep: var(--deep-ember);
+}
+.marquee__group li:nth-child(6n) {
+  --sep: var(--deep-violet);
+}
+html.motion-ok .marquee__track {
+  animation: marquee-run 64s linear infinite;
+}
+@keyframes marquee-run {
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* без движения лента не бегает: пункты переносятся и читаются целиком */
+html:not(.motion-ok) .marquee__track {
+  width: 100%;
+  justify-content: center;
+}
+html:not(.motion-ok) .marquee__group {
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-inline: 16px;
+}
+html:not(.motion-ok) .marquee__group--copy {
+  display: none;
+}
+html:not(.motion-ok) .marquee__group li:last-child::after {
+  display: none;
+}
+@media (max-width: 800px) {
+  .marquee__group li {
+    padding-block: 9px 8px;
+    font-size: 11px;
+  }
+  .marquee__group li::after {
+    margin-inline: 22px;
+  }
+}
+
+/* ───────────── Каркас: полосы секций ───────────── */
 .landing-page {
   width: 100%;
   max-width: none;
-  padding: 0 0 72px;
+  padding: 0;
 }
 
+/* Каждая секция — полоса своего цвета на всю ширину экрана, содержимое остаётся в колонке.
+   Полосу рисует ::before шириной 100vw (лишнее обрезает overflow-x: clip у .landing-page). */
+.mechanics,
+.case-study,
+.audience,
+.process,
+.configurator,
+.analytics,
+.faq,
+.final-cta {
+  position: relative;
+  isolation: isolate;
+  margin-top: 0;
+  padding-block: var(--band-pad);
+}
+.mechanics::before,
+.case-study::before,
+.audience::before,
+.process::before,
+.configurator::before,
+.analytics::before,
+.faq::before,
+.final-cta::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  translate: -50% 0;
+  background: var(--band, var(--deep-canvas));
+}
+.mechanics {
+  --mark: var(--deep-sun);
+}
+.case-study {
+  --band: var(--deep-concrete);
+  --mark: var(--deep-blue);
+}
+.audience {
+  --mark: var(--deep-mint);
+}
+.process {
+  --band: var(--deep-sky);
+  --mark: var(--deep-lavender);
+}
+.configurator {
+  --band: var(--deep-mint);
+  --mark: #fff;
+}
+.analytics {
+  --mark: var(--deep-sun);
+}
+.faq {
+  --band: var(--deep-concrete);
+  --mark: var(--deep-sun);
+}
+.final-cta {
+  --band: var(--deep-violet);
+  --mark: var(--deep-sun);
+  color: #fff;
+}
+.case-study__inner,
+.configurator__inner,
+.analytics__inner {
+  width: min(var(--content), calc(100% - 64px));
+  margin-inline: auto;
+}
+
+/* ───────────── Первый экран ───────────── */
 .hero {
   width: 100%;
   min-height: 0;
@@ -96,143 +289,192 @@ body {
   color: var(--deep-text);
 }
 .hero__surface {
+  /* полоса неба на всю ширину экрана */
+  inset: 0 auto;
+  left: 50%;
+  width: 100vw;
+  translate: -50% 0;
   border-radius: 0;
-  background: var(--deep-canvas);
-  /* вырез под кнопку из старого оформления больше не нужен */
+  background: var(--deep-sky);
   -webkit-mask-box-image-source: none;
   mask-border-source: none;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
-.hero__surface::before {
-  inset: 0;
-  background: radial-gradient(
-    ellipse 55% 48% at 50% 100%,
-    rgba(0, 55, 194, 0.3),
-    transparent 72%
-  );
-}
-/* размытая спираль с основного сайта (home-hero-spiral.svg): кольца за слайдером, снизу и сверху плавно гаснут */
-.hero__surface::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -520px;
-  z-index: 0;
-  width: 1500px;
-  height: 1469px;
-  transform: translateX(-50%);
-  background: url('/images/deep-spiral.svg') center / 100% 100% no-repeat;
-  opacity: 0.92;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 0,
-    #000 14%,
-    #000 55%,
-    transparent 90%
-  );
-  mask-image: linear-gradient(
-    to top,
-    transparent 0,
-    #000 14%,
-    #000 55%,
-    transparent 90%
-  );
-}
+.hero__surface::before,
+.hero__surface::after,
 .hero__grain {
+  content: none;
   display: none;
 }
-/* свечение спирали плавно гаснет к нижнему краю первого экрана, без горизонтального среза */
-.hero__surface {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0,
-    #000 calc(100% - 170px),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0,
-    #000 calc(100% - 170px),
-    transparent 100%
-  );
+.hero__body {
+  padding: clamp(64px, 7.2vw, 104px) 24px var(--band-pad);
 }
-
-.site-header {
-  position: relative;
-  inset: auto;
-  z-index: 6;
-  height: 88px;
-  padding: 0 40px;
-  gap: 32px;
-  border-bottom: 1px solid var(--deep-border);
-  background: rgba(15, 15, 16, 0.86);
-  backdrop-filter: blur(12px);
+.hero__content {
+  width: min(1240px, 100%);
+  max-width: 1240px;
 }
-.site-header__brand {
+.hero__content h1 {
+  margin: 0;
+  color: var(--deep-text);
+  font: 900 clamp(56px, 8.4vw, 116px) / 0.88 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.hero__content h1 span {
+  display: block;
+  color: inherit;
+}
+.hero__content > p {
+  max-width: 780px;
+  margin-top: 28px;
+  color: var(--deep-text);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.42;
+}
+.hero__actions {
+  gap: 12px;
+  margin-top: 28px;
+}
+.hero__actions .arrow-button {
+  width: auto;
+  justify-content: center;
+  padding-inline: 26px;
+  font-size: 13.5px;
+  line-height: 1.2;
+}
+.hero__actions .arrow-button__icon {
   width: auto;
   height: auto;
   flex: 0 0 auto;
 }
-.site-nav {
-  justify-content: center;
-  gap: 8px;
-  padding: 0;
+.hero__actions .arrow-button__arrow.arrow-icon {
+  width: 18px;
+  height: 18px;
 }
-.site-nav a {
-  padding: 8px 16px;
-  border-radius: 8px;
-  color: var(--deep-text);
-  font-size: 18px;
-  font-weight: 350;
-}
-.site-nav a:hover {
-  background: var(--deep-surface-2);
-  transform: none;
-}
-.site-nav a:active {
-  background: rgba(255, 255, 255, 0.09);
-  transform: none;
-}
-.site-nav a:focus-visible,
-.brief-button:focus-visible,
-.hero__actions a:focus-visible {
-  outline: 2px solid var(--deep-link);
-  outline-offset: 3px;
+.hero__stage {
+  /* на всю ширину экрана: слайдер выходит за боковые поля hero__body (24px) */
+  width: calc(100% + 48px);
+  margin-top: 44px;
 }
 
-/* ───────────── Кнопки: как .button--primary / .button--outline на основном сайте ───────────── */
+/* наклейки вокруг заголовка: вокруг второй строки и на углах первой */
+.hero__title {
+  position: relative;
+}
+.hero__stickers {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.sticker {
+  position: absolute;
+  display: grid;
+  width: var(--s, 96px);
+  aspect-ratio: 1;
+  place-items: center;
+  padding: calc(var(--s, 96px) * 0.14);
+  border: 1px solid var(--deep-border);
+  border-radius: 22%;
+  background: var(--tile, #fff);
+  rotate: var(--r, -8deg);
+}
+.sticker img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.hero__stickers .sticker--quiz {
+  --s: 104px;
+  --r: -10deg;
+  top: 50%;
+  left: 1%;
+}
+.hero__stickers .sticker--trophy {
+  --s: 96px;
+  --r: 9deg;
+  top: 46%;
+  right: 1%;
+}
+.hero__stickers .sticker--gift {
+  --s: 84px;
+  --r: 8deg;
+  top: -50%;
+  left: 5%;
+}
+.hero__stickers .sticker--receipt {
+  --s: 88px;
+  --r: -9deg;
+  top: -47%;
+  right: 7%;
+}
+@media (max-width: 1100px) {
+  .hero__stickers .sticker--quiz {
+    --s: 76px;
+    top: 58%;
+    left: 0;
+  }
+  .hero__stickers .sticker--trophy {
+    --s: 70px;
+    top: 56%;
+    right: 0;
+  }
+  .hero__stickers .sticker--gift,
+  .hero__stickers .sticker--receipt {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  /* на телефоне наклейки — парой под заголовком, абзац опущен ниже, чтобы они не лежали на тексте */
+  .hero__stickers .sticker--quiz {
+    --s: 56px;
+    top: auto;
+    bottom: -62px;
+    left: calc(50% - 64px);
+  }
+  .hero__stickers .sticker--trophy {
+    --s: 52px;
+    top: auto;
+    bottom: -58px;
+    right: calc(50% - 64px);
+  }
+  .hero__content > p {
+    margin-top: 84px;
+  }
+}
+
+/* ───────────── Кнопки ───────────── */
 .brief-button,
 .arrow-button,
 .compact-cta {
-  min-height: 52px;
-  padding: 8px 20px;
-  border: 1px solid transparent;
+  gap: 10px;
+  min-height: 50px;
+  padding: 10px 24px;
+  border: 1px solid var(--deep-border);
   border-radius: var(--deep-radius-btn);
   background: var(--deep-primary);
-  color: var(--deep-text);
-  font: 350 18px/1.25 var(--font-mono);
-  letter-spacing: 0;
-  text-transform: none;
+  color: #fff;
+  font: 700 13.5px/1.2 var(--font-ui);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
   box-shadow: none;
   filter: none;
   transition:
     background-color 160ms ease,
-    border-color 160ms ease,
-    transform 160ms ease;
+    color 160ms ease;
 }
 .brief-button {
   width: auto;
   flex: 0 0 auto;
-  font-size: 20px;
-  font-weight: 300;
-}
-.site-header .brief-button {
-  box-shadow: none;
 }
 .brief-button:hover,
 .arrow-button:hover,
 .compact-cta:hover {
   background: var(--deep-primary-hover);
+  color: #fff;
   filter: none;
   transform: none;
   box-shadow: none;
@@ -244,7 +486,6 @@ body {
   filter: none;
   transform: none;
 }
-
 .arrow-button__icon,
 .compact-cta__icon,
 .compact-cta span {
@@ -257,364 +498,302 @@ body {
 }
 .arrow-button__arrow.arrow-icon,
 .compact-cta__icon .arrow-icon {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
 }
+/* светлая кнопка — на цветных панелях */
 .arrow-button--light {
-  background: var(--deep-text);
-  color: var(--deep-primary);
+  background: #fff;
+  color: var(--deep-text);
 }
 .arrow-button--light:hover {
-  background: #fff;
+  background: var(--deep-sun);
+  color: var(--deep-text);
 }
 .arrow-button--light .arrow-button__icon {
   background: transparent;
-  color: var(--deep-primary);
+  color: currentColor;
 }
 
 .hero__secondary {
-  min-height: 52px;
-  padding: 8px 20px;
-  border: 1px solid var(--deep-border-2);
+  min-height: 50px;
+  padding: 10px 24px;
+  border: 1px solid var(--deep-border);
   border-radius: var(--deep-radius-btn);
-  background: transparent;
+  background: #fff;
   color: var(--deep-text);
-  font: 300 18px/1.25 var(--font-mono);
-  text-transform: none;
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease;
+  font: 700 13.5px/1.2 var(--font-ui);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease;
 }
 .hero__secondary:hover {
-  border-color: #3a3b40;
-  background: var(--deep-surface-2);
+  background: var(--deep-sun);
   transform: none;
 }
 .hero__secondary:active {
-  background: rgba(255, 255, 255, 0.09);
+  background: #f0c800;
   transform: none;
 }
 
-/* ───────────── Первый экран ───────────── */
-.hero__body {
-  padding: clamp(28px, 3vw, 44px) 24px 72px;
+.brief-button:focus-visible,
+.arrow-button:focus-visible,
+.compact-cta:focus-visible,
+.hero__secondary:focus-visible,
+.hero__actions a:focus-visible {
+  outline: 3px solid var(--deep-focus);
+  outline-offset: 3px;
 }
-.hero__content h1 {
-  font: 400 clamp(32px, 3.6vw, 54px)/1.1 var(--font-mono);
-  letter-spacing: -0.045em;
-  color: var(--deep-text);
-  text-wrap: balance;
-}
-.hero__content h1 span {
-  color: var(--deep-link);
-}
-.hero__content > p {
-  max-width: 780px;
-  margin-top: 22px;
-  color: var(--deep-text-soft);
-  font-size: 16px;
-  font-weight: 350;
-  line-height: 1.55;
-}
-.hero__actions {
-  gap: 12px;
-  margin-top: 26px;
-}
-.hero__actions .arrow-button {
-  width: auto;
-  justify-content: center;
-  padding: 8px 18px 8px 22px;
-  font-size: 18px;
-  line-height: 1.25;
-}
-.hero__stage {
-  /* на всю ширину экрана: слайдер выходит за боковые поля hero__body (24px) */
-  width: calc(100% + 48px);
-  margin-top: 28px;
-}
-
-/* ═════════════ Часть 2: остальные секции ═════════════ */
 
 /* ───────────── Общие элементы секций ───────────── */
-.section-title {
+.section-title,
+.configurator__intro h2,
+.analytics__heading h2,
+.final-cta h2 {
+  margin: 0;
   color: var(--deep-text);
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 1.14;
+  font: 900 var(--title-size) / 0.9 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
 }
-.section-title span {
-  color: var(--deep-link);
+/* выделенные слова заголовка — плашка-наклейка цвета секции */
+.section-title span,
+.configurator__intro h2 span,
+.analytics__heading h2 span,
+.final-cta h2 span,
+.builder-panel > h3 span {
+  display: inline-block;
+  padding: 0.04em 0.16em 0.08em;
+  border: 1px solid var(--deep-border);
+  border-radius: 0.2em;
+  background: var(--mark, var(--deep-sun));
+  color: var(--deep-text);
+  rotate: -1.5deg;
 }
-.section-lead {
-  color: var(--deep-muted);
-  font-weight: 350;
-  line-height: 1.5;
+.section-lead,
+.configurator__intro p,
+.analytics__heading p {
+  color: var(--deep-text);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
 }
-.eyebrow-pill {
-  border: 1px solid rgba(108, 149, 255, 0.3);
-  background: var(--deep-tint);
-  color: var(--deep-link);
-  font-weight: 350;
+/* принудительный перенос в подзаголовке конфигуратора — только на широком экране: на планшете от него остаётся огрызок строки */
+.configurator__intro p {
+  text-wrap: balance;
+}
+@media (max-width: 1279px) {
+  .desktop-break {
+    display: none;
+  }
 }
 
-/* плитки-иконки: тёмная плитка и белый значок с мягким синим свечением, как значки услуг на основном сайте */
+/* плитки-значки: цветная плитка с чёрным контуром и чёрным значком */
 .icon-tile {
-  border: 1px solid rgba(108, 149, 255, 0.22);
-  border-radius: 12px;
-  background: var(--deep-tint);
-  color: #fff;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-tile);
+  background: var(--accent, var(--deep-sun));
+  color: var(--accent-on, #000);
 }
 .icon-tile img {
-  filter: brightness(0) invert(1) drop-shadow(0 0 7px rgba(44, 104, 255, 0.85));
+  filter: brightness(0);
 }
 
-/* ритм страницы: секции идут по одной колонке на фоне #0f0f10, без светлых «листов» */
-.mechanics,
-.faq {
-  margin-top: 88px;
-}
-.case-study,
-.configurator,
-.analytics {
-  margin-top: 88px;
-  padding-block: 0;
-  padding-inline: 0;
-  border-radius: 0;
-  background: transparent;
-}
-.case-study {
-  background: radial-gradient(
-    ellipse 45% 55% at 0% 50%,
-    rgba(0, 55, 194, 0.16),
-    transparent 70%
-  );
-}
-.configurator {
-  background:
-    radial-gradient(
-      ellipse 45% 50% at 100% 60%,
-      rgba(0, 55, 194, 0.2),
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 35% 40% at 0% 40%,
-      rgba(0, 55, 194, 0.1),
-      transparent 70%
-    );
-}
-.analytics {
-  background: radial-gradient(
-    ellipse 50% 40% at 50% 30%,
-    rgba(0, 55, 194, 0.14),
-    transparent 70%
-  );
-}
-.case-study__inner,
-.configurator__inner,
-.analytics__inner {
-  width: min(var(--content), calc(100% - 64px));
-  margin-inline: auto;
-}
-
-/* ───────────── Для кого ───────────── */
-
+/* ───────────── Для кого: баннер Telegram ───────────── */
 .telegram-banner {
-  border: 1px solid rgba(138, 170, 255, 0.3);
-  border-radius: 12px;
-  background: linear-gradient(110deg, #0a2a8f 0%, #0037c2 55%, #0a2a8f 100%);
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-card);
+  background: var(--deep-violet);
+  color: #fff;
 }
 .telegram-banner .icon-tile {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(0, 10, 50, 0.45);
+  border-color: var(--deep-border);
+  background: #fff;
   box-shadow: none;
+  color: #000;
 }
 .telegram-banner__copy strong {
-  font-weight: 600;
+  font-weight: 700;
 }
 .telegram-banner__copy small {
-  color: rgba(226, 235, 255, 0.82);
-  font-weight: 350;
+  color: rgb(255 255 255 / 0.92);
+  font-weight: 500;
 }
 .telegram-banner__arrow {
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 12px;
-  background: transparent;
-  color: #fff;
+  border: 1px solid var(--deep-border);
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
 }
 
 /* ───────────── Кейсы ───────────── */
 .case-study__filter > span {
-  color: var(--deep-muted-2);
+  color: var(--deep-text);
 }
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border: 1px solid var(--deep-border-2);
-  background: transparent;
-  color: var(--deep-text-soft);
-  font-weight: 350;
+  border: 1px solid var(--deep-border);
+  background: #fff;
+  color: var(--deep-text);
+  font: 600 14px/1.25 var(--font-ui);
   transition:
-    border-color 160ms ease,
     background-color 160ms ease,
     color 160ms ease;
 }
 .chip::before {
   content: '';
-  width: 6px;
-  height: 6px;
-  flex: 0 0 6px;
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border: 1px solid var(--deep-border);
   border-radius: 50%;
-  background: var(--deep-muted-2);
+  background: var(--accent, var(--deep-sun));
 }
 .chip:hover {
-  border-color: #3a3b40;
-  background: var(--deep-surface-2);
+  border-color: var(--deep-border);
+  background: var(--accent, var(--deep-sun));
+  color: var(--accent-on, #000);
 }
 .chip--selected,
 .chip--selected:hover {
-  border-color: var(--deep-primary);
-  background: var(--deep-primary);
+  border-color: var(--deep-border);
+  background: #000;
   color: #fff;
-  font-weight: 350;
+  font-weight: 600;
 }
 .chip--selected::before {
-  background: #fff;
+  border-color: #fff;
 }
 .chip:focus-visible,
 .chip--selected:focus-visible {
-  outline: 2px solid var(--deep-link);
-  outline-offset: 2px;
+  outline: 3px solid var(--deep-focus);
+  outline-offset: 3px;
 }
 
 /* ───────────── Механики ───────────── */
-
 .builder-options button:focus-visible,
-.scenario-tabs button:focus-visible,
-.integration-card:focus-visible {
-  outline: 2px solid var(--deep-link);
+.scenario-tabs button:focus-visible {
+  outline: 3px solid var(--deep-focus);
   outline-offset: 3px;
 }
 
 /* ───────────── Конфигуратор ───────────── */
-.configurator__intro h2 {
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 1.15;
-}
-.configurator__intro h2 span {
-  color: var(--deep-link);
-}
-.configurator__intro p {
-  color: var(--deep-muted);
-  font-size: 15px;
-  line-height: 1.5;
-}
 .builder-panel {
-  border-color: var(--deep-border);
-  border-radius: var(--deep-radius-card);
-  background: var(--deep-surface);
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-panel);
+  background: #fff;
 }
 .builder-panel > h3 {
-  font-weight: 400;
-  letter-spacing: -0.04em;
-}
-.builder-panel > h3 span {
-  color: var(--deep-link);
+  font: 900 36px / 0.95 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .builder-question {
-  border-bottom-color: var(--deep-border);
+  border-bottom-color: var(--deep-hairline);
 }
 .builder-question legend {
-  font-weight: 400;
+  font-weight: 700;
 }
 .builder-options button {
-  min-height: 32px;
-  padding: 4px 14px;
-  border: 1px solid var(--deep-border-2);
-  background: transparent;
-  color: var(--deep-text-soft);
-  font-size: 13px;
-  font-weight: 350;
+  min-height: 34px;
+  padding: 5px 14px;
+  border: 1px solid var(--deep-border);
+  background: #fff;
+  color: var(--deep-text);
+  font: 600 13.5px/1.25 var(--font-ui);
   cursor: pointer;
   transition:
-    border-color 160ms ease,
     background-color 160ms ease,
     color 160ms ease;
 }
 .builder-options button:hover {
-  border-color: #3a3b40;
-  background: var(--deep-surface-2);
+  border-color: var(--deep-border);
+  background: var(--deep-sun);
 }
 .builder-options button.is-selected {
-  border-color: var(--deep-primary);
-  background: var(--deep-primary);
+  border-color: var(--deep-border);
+  background: #000;
   color: #fff;
 }
 
 .project-summary {
-  border: 1px solid rgba(138, 170, 255, 0.32);
-  border-radius: var(--deep-radius-card);
-  background: linear-gradient(150deg, #0a2a8f 0%, #0037c2 52%, #1a5bff 135%);
-  box-shadow: 0 30px 80px rgba(0, 55, 194, 0.28);
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-panel);
+  background: var(--deep-violet);
+  color: #fff;
+  box-shadow: none;
 }
 .project-summary__eyebrow {
-  font-weight: 350;
-  opacity: 0.85;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 1;
 }
 .project-summary h3 {
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font: 900 40px / 0.95 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .summary-tags span {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+}
+/* значки у «Состава» и «Масштаба»: белые плитки на фиолетовой панели, как в баннере Telegram */
+.summary-facts .icon-tile {
+  width: 44px;
+  height: 44px;
+  flex-basis: 44px;
+  border-radius: 14px;
+  background: #fff;
+}
+.summary-facts .icon-tile img {
+  width: 24px;
+  height: 24px;
 }
 .project-summary__cta .arrow-button {
-  padding: 8px 20px;
-  font: 350 18px/1.25 var(--font-mono);
-  letter-spacing: 0;
+  padding: 10px 24px;
+  background: #fff;
+  color: #000;
+  font: 700 13.5px / 1.25 var(--font-ui);
+  letter-spacing: 0.035em;
+}
+.project-summary__cta .arrow-button:hover {
+  background: var(--deep-sun);
+  color: #000;
+}
+.project-summary__cta small {
+  color: #fff;
+  font-size: 12px;
 }
 .project-summary__cta .arrow-button__icon {
   width: auto;
   height: auto;
   flex: 0 0 auto;
   background: transparent;
-  color: var(--deep-primary);
+  color: currentColor;
 }
-
-/* окно «Обсудить проект» */
 
 /* ───────────── Аналитика ───────────── */
-.analytics__heading h2 {
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 1.15;
-}
-.analytics__heading h2 span {
-  color: var(--deep-link);
-}
-.analytics__heading p {
-  color: var(--deep-muted);
-  font-size: 15px;
-  line-height: 1.5;
-}
 .scenario-tabs {
   border: 1px solid var(--deep-border);
-  background: var(--deep-surface);
+  background: #fff;
 }
 .scenario-tabs button {
-  color: var(--deep-text-soft);
-  font-weight: 350;
+  color: var(--deep-text);
+  font-weight: 600;
 }
 .scenario-tabs button:hover {
-  background: var(--deep-surface-2);
+  background: var(--deep-sun);
   color: var(--deep-text);
 }
 .scenario-tabs button.is-selected,
 .scenario-tabs button.is-selected:hover {
-  background: var(--deep-primary);
+  background: #000;
   color: #fff;
 }
 
@@ -622,24 +801,22 @@ body {
 .faq-item {
   border: 1px solid var(--deep-border);
   border-radius: var(--deep-radius-card);
-  background: var(--deep-surface);
-  transition:
-    border-color 200ms ease,
-    background-color 200ms ease;
+  background: #fff;
+  transition: background-color 200ms ease;
 }
 .faq-item:hover {
-  border-color: var(--deep-border-2);
+  border-color: var(--deep-border);
 }
 .faq-item.is-open {
-  border-color: rgba(108, 149, 255, 0.34);
-  background: var(--deep-tint);
+  border-color: var(--deep-border);
+  background: var(--deep-sun);
 }
 .faq-item__trigger {
-  font-weight: 350;
+  font-weight: 700;
 }
 .faq-item__trigger img {
-  filter: brightness(0) invert(1);
-  opacity: 0.8;
+  filter: brightness(0);
+  opacity: 1;
   /* закрыт — стрелка вниз, открыт — вверх (в исходной вёрстке было наоборот) */
   transform: rotate(0);
 }
@@ -647,21 +824,49 @@ body {
   transform: rotate(180deg);
 }
 .faq-item__panel p {
-  color: var(--deep-muted);
+  max-width: none;
+  color: var(--deep-text);
+  font-size: 16px;
+  line-height: 1.5;
+}
+/* заголовок — как у остальных секций (в global.css для FAQ был свой мелкий кегль) */
+.faq__heading .section-title {
+  font-size: var(--title-size);
+}
+/* на широком экране: слева заголовок (остаётся на месте при прокрутке), справа список вопросов */
+@media (min-width: 1024px) {
+  .faq {
+    display: grid;
+    grid-template-columns: minmax(260px, 4fr) minmax(0, 8fr);
+    column-gap: clamp(32px, 4vw, 72px);
+    align-items: start;
+  }
+  .faq__heading {
+    position: sticky;
+    top: 32px;
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 800px) {
+  .faq-item__trigger {
+    font-size: 15px;
+  }
+  .faq-item__panel p {
+    font-size: 15px;
+  }
 }
 
-/* ───────────── Подвал и страница кейсов ───────────── */
-
+/* ───────────── Страница кейсов ───────────── */
 .cases-page {
   padding-top: 0;
 }
 .cases-page__bar {
   width: 100%;
-  min-height: 88px;
+  min-height: 76px;
   margin-bottom: 48px;
   padding: 0 40px;
   border-bottom: 1px solid var(--deep-border);
-  background: rgba(15, 15, 16, 0.86);
+  background: var(--deep-sky);
 }
 .cases-page__brand {
   width: auto;
@@ -669,13 +874,17 @@ body {
   flex: 0 0 auto;
 }
 .cases-page__nav a {
-  border-radius: 8px;
+  padding: 9px 16px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: #fff;
   color: var(--deep-text);
-  font-size: 18px;
-  font-weight: 350;
+  font: 700 12.5px/1 var(--font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 .cases-page__nav a:hover {
-  background: var(--deep-surface-2);
+  background: var(--deep-sun);
   color: var(--deep-text);
 }
 .cases-page__bar .brief-button {
@@ -685,15 +894,16 @@ body {
 .cases-card {
   border-color: var(--deep-border);
   border-radius: var(--deep-radius-card);
-  background: var(--deep-surface);
+  background: #fff;
 }
 .cases-card__kind {
-  color: var(--deep-link);
-  font-weight: 350;
+  color: var(--deep-text);
+  font-weight: 700;
 }
 .cases-card__body h2 {
-  font-weight: 400;
-  letter-spacing: -0.03em;
+  font: 900 34px / 0.95 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .cases-card__text {
   color: var(--deep-muted);
@@ -707,13 +917,6 @@ body {
   }
 }
 @media (max-width: 800px) {
-  .mechanics,
-  .faq,
-  .case-study,
-  .configurator,
-  .analytics {
-    margin-top: 56px;
-  }
   .case-study__inner,
   .configurator__inner,
   .analytics__inner {
@@ -736,81 +939,27 @@ body {
   white-space: nowrap;
 }
 
-/* планшеты: компактная шапка (в исходной вёрстке так же уменьшались пункты меню) и одна колонка там, где две стали тесными */
-@media (max-width: 1100px) {
-  .site-header {
-    padding: 0 24px;
-    gap: 16px;
-  }
-  .site-nav {
-    gap: 2px;
-  }
-  .site-nav a {
-    padding: 8px 10px;
-    font-size: 15px;
-  }
-  .brief-button {
-    padding: 8px 16px;
-    font-size: 16px;
-  }
-}
-
-/* кнопка в карточке механики может переноситься — иначе при моноширинном шрифте она выпирает из узкой колонки */
-
 /* ───────────── Телефоны и узкие экраны ───────────── */
 @media (max-width: 800px) {
   .arrow-button,
   .compact-cta {
-    font-size: 15px;
-  }
-  /* в исходной вёрстке правило для ≤1200px шло позже и возвращало две колонки на телефоне */
-  .site-header {
-    height: 72px;
-    padding: 0 16px;
-    gap: 12px;
+    font-size: 12.5px;
   }
   .brand-mark__logo {
     width: 88px;
   }
   .brand-mark small {
-    font-size: 10px;
-  }
-  .brief-button {
-    min-height: 44px;
-    padding: 6px 16px;
-    font-size: 16px;
-  }
-  .site-nav a {
-    font-size: 16px;
+    font-size: 9px;
   }
   .hero__body {
-    padding-bottom: 72px;
-  }
-  .hero__surface {
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      #000 0,
-      #000 calc(100% - 120px),
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      #000 0,
-      #000 calc(100% - 120px),
-      transparent 100%
-    );
+    padding-bottom: 56px;
   }
   .cases-page__bar {
-    min-height: 72px;
+    min-height: 68px;
   }
 }
 @media (max-width: 480px) {
   .hero__content h1 {
-    font-size: clamp(26px, 7.9vw, 34px);
+    font-size: clamp(44px, 14.4vw, 80px);
   }
 }
-
-/* Иконки механик — как значки услуг на deep-agency.ru: минималистичный глиф с мягким
-   размытым краем, без плитки и бликов. Цвет у каждой механики свой — из палитры акцентов
-   (см. accent.css и поле accent в mechanicsCatalog). На активной (кобальтовой) карточке глиф белый. */
-/* в карточке иконка в два слоя: мягкая в покое и чёткая при наведении (переключение — в motion.css) */

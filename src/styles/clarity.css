@@ -2,7 +2,7 @@
    Всё, что добавлено при правке «понятно ли, что мы продаём»: липкая шапка с меню-бургером,
    строка «для задач» и клиенты в hero, ссылки-карточки «Для кого», переключатель проектов
    в кейсах, блоки «Как мы работаем» и финальный призыв, пометки в конфигураторе и аналитике.
-   Подключается последним — переопределяет global.css и theme-deep.css (селекторы того же веса). */
+   Подключается после global.css и theme-deep.css — переопределяет их (селекторы того же веса). */
 
 html {
   scroll-padding-top: 96px;
@@ -27,24 +27,24 @@ html {
   height: auto;
   padding: 0;
   gap: 0;
-  border-bottom: 1px solid var(--deep-border);
-  background: rgba(15, 15, 16, 0.86);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  background: var(--deep-sky);
   transition:
     background-color 200ms ease,
     border-color 200ms ease;
 }
-.site-header.is-scrolled {
-  border-bottom-color: var(--deep-border-2);
-  background: rgba(15, 15, 16, 0.94);
+/* при прокрутке шапка белеет и получает чёрную линию снизу */
+.site-header.is-scrolled,
+.site-header.is-open {
+  border-bottom-color: var(--deep-border);
+  background: #fff;
 }
 .site-header__bar {
   display: flex;
   height: 76px;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
+  gap: 24px;
   padding: 0 40px;
 }
 .site-header__brand {
@@ -54,20 +54,46 @@ html {
 }
 .site-header .site-nav {
   min-width: 0;
+  justify-content: center;
+  gap: 8px;
+  padding: 0;
 }
 .site-header .site-nav a {
   position: relative;
-  padding: 8px 14px;
-  font-size: 17px;
+  padding: 10px 16px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: #fff;
+  color: var(--deep-text);
+  font: 700 12.5px/1 var(--font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
 }
+.site-header .site-nav a:hover {
+  background: var(--deep-sun);
+  transform: none;
+}
+.site-header .site-nav a:active {
+  background: #f0c800;
+  transform: none;
+}
+/* пункт текущего раздела — чёрная пилюля */
 .site-header .site-nav a[aria-current] {
-  background: rgba(108, 149, 255, 0.1);
-  color: var(--deep-link);
+  background: #000;
+  color: #fff;
+}
+.site-nav a:focus-visible,
+.site-menu a:focus-visible,
+.site-header__burger:focus-visible {
+  outline: 3px solid var(--deep-focus);
+  outline-offset: 3px;
 }
 .site-header .brief-button {
-  min-height: 48px;
-  padding: 8px 20px;
-  font-size: 18px;
+  min-height: 46px;
+  padding: 8px 22px;
   white-space: nowrap;
 }
 .site-header__burger {
@@ -79,22 +105,22 @@ html {
 
 @media (max-width: 1280px) {
   .site-header__bar {
-    gap: 20px;
+    gap: 16px;
     padding: 0 32px;
   }
-  .site-header .site-nav a {
-    padding: 8px 10px;
-    font-size: 16px;
+  .site-header .site-nav {
+    gap: 6px;
   }
-  .site-header .brief-button {
-    font-size: 17px;
+  .site-header .site-nav a {
+    padding: 9px 13px;
+    font-size: 12px;
   }
 }
 
 /* планшеты и телефоны: пункты меню уходят в выпадающую панель */
 @media (max-width: 1080px) {
   .site-header__bar {
-    height: 72px;
+    height: 68px;
     gap: 12px;
     padding: 0 24px;
   }
@@ -114,26 +140,18 @@ html {
     justify-content: center;
     gap: 5px;
     padding: 0;
-    border: 1px solid var(--deep-border-2);
-    border-radius: 12px;
-    background: transparent;
+    border: 1px solid var(--deep-border);
+    border-radius: 50%;
+    background: #fff;
     cursor: pointer;
-    transition:
-      background-color 160ms ease,
-      border-color 160ms ease;
+    transition: background-color 160ms ease;
   }
   .site-header__burger:hover {
-    border-color: #3a3b40;
-    background: var(--deep-surface-2);
-  }
-  .site-header__burger:focus-visible,
-  .site-menu a:focus-visible {
-    outline: 2px solid var(--deep-link);
-    outline-offset: 3px;
+    background: var(--deep-sun);
   }
   .site-header__burger span {
     display: block;
-    width: 20px;
+    width: 18px;
     height: 2px;
     border-radius: 2px;
     background: var(--deep-text);
@@ -156,30 +174,28 @@ html {
     right: 0;
     left: 0;
     display: grid;
-    gap: 2px;
-    max-height: calc(100vh - 72px);
+    gap: 0;
+    max-height: calc(100vh - 68px);
     overflow-y: auto;
-    padding: 8px 24px 20px;
-    border-bottom: 1px solid var(--deep-border-2);
-    background: var(--deep-canvas);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    padding: 8px 24px 24px;
+    border-bottom: 1px solid var(--deep-border);
+    background: #fff;
     animation: site-menu-in 180ms ease both;
   }
   .site-menu a:not(.brief-button) {
-    padding: 14px 12px;
-    border-radius: 8px;
+    padding: 12px 4px 10px;
+    border-bottom: 1px solid var(--deep-hairline);
     color: var(--deep-text);
-    font-size: 18px;
-    font-weight: 350;
-    line-height: 1.2;
+    font: 900 34px / 1 var(--font-display);
+    text-transform: uppercase;
   }
   .site-menu a:not(.brief-button):hover,
   .site-menu a:not(.brief-button):active {
-    background: var(--deep-surface-2);
+    background: var(--deep-sky);
   }
   .site-menu a[aria-current] {
-    background: rgba(108, 149, 255, 0.1);
-    color: var(--deep-link);
+    background: var(--deep-sun);
+    color: var(--deep-text);
   }
   .site-menu .brief-button {
     display: none;
@@ -198,8 +214,8 @@ html {
   }
   .site-header__bar > .brief-button {
     min-height: 44px;
-    padding: 6px 14px;
-    font-size: 15px;
+    padding: 6px 16px;
+    font-size: 12px;
   }
   .site-menu:not([hidden]) {
     padding-inline: 16px;
@@ -216,18 +232,13 @@ html {
   .site-menu .brief-button {
     display: inline-flex;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 14px;
   }
 }
 
 /* ───────────── Первый экран: оффер, «для задач», клиенты ───────────── */
-.hero__body {
-  padding-bottom: 36px;
-}
 .hero__content > p {
-  max-width: 880px;
-  font-size: 17px;
-  line-height: 1.45;
+  max-width: 820px;
   /* без «висячих» слов в конце строки на узких экранах */
   text-wrap: balance;
 }
@@ -244,14 +255,14 @@ html {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px 12px;
+  gap: 10px 14px;
   max-width: 1000px;
-  margin: 24px auto 0;
+  margin: 30px auto 0;
 }
 .hero__audience-label,
 .hero__proof-label {
-  color: var(--deep-muted-2);
-  font-size: 12px;
+  color: var(--deep-text);
+  font: 700 12px/1 var(--font-ui);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -260,21 +271,22 @@ html {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
+/* каждая задача — наклейка цвета из accent.css */
 .hero__audience li {
-  padding: 5px 12px 6px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 6px;
-  background: rgba(15, 15, 16, 0.55);
-  color: var(--deep-text-soft);
-  font-size: 14px;
-  font-weight: 350;
-  line-height: 1.3;
+  padding: 8px 16px 9px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: var(--accent);
+  color: var(--accent-on);
+  font: 700 14px/1.2 var(--font-ui);
+  letter-spacing: -0.005em;
   white-space: nowrap;
+  rotate: var(--tilt, 0deg);
 }
 /* «Проекты для …» — сразу под задачами, чтобы доказательство было на первом экране, а не под сгибом */
 .hero__proof {
@@ -282,35 +294,34 @@ html {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 6px 14px;
-  margin: 14px auto 0;
+  gap: 6px 16px;
+  margin: 20px auto 0;
 }
 .hero__proof ul {
-  gap: 4px 22px;
+  gap: 4px 24px;
 }
 .hero__proof li {
-  color: var(--deep-text-soft);
-  font-size: 15px;
-  font-weight: 400;
+  color: var(--deep-text);
+  font: 800 16px/1.2 var(--font-ui);
   letter-spacing: -0.01em;
 }
 
 @media (max-width: 800px) {
   .hero__content > p {
-    font-size: 15px;
+    font-size: 16px;
   }
   .hero__actions {
-    margin-top: 20px;
+    margin-top: 22px;
   }
   .hero__audience {
-    margin-top: 20px;
+    margin-top: 24px;
   }
 }
 /* телефон: все шесть задач видны сразу (в несколько рядов), без скрытой прокрутки */
 @media (max-width: 600px) {
   .hero__audience {
     gap: 8px;
-    margin-top: 18px;
+    margin-top: 22px;
   }
   .hero__audience-label,
   .hero__proof-label {
@@ -318,15 +329,15 @@ html {
     text-align: center;
   }
   .hero__audience ul {
-    gap: 6px;
+    gap: 8px;
   }
   .hero__audience li {
-    padding: 4px 10px 5px;
+    padding: 6px 12px 7px;
     font-size: 13px;
   }
   .hero__proof {
     gap: 4px 12px;
-    margin-top: 14px;
+    margin-top: 16px;
   }
   .hero__proof ul {
     gap: 2px 16px;
@@ -348,8 +359,8 @@ html {
   margin-top: 4px;
 }
 .case-study__examples > span {
-  color: var(--deep-muted-2);
-  font-size: 12px;
+  color: var(--deep-text);
+  font: 700 12px/1 var(--font-ui);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -362,41 +373,32 @@ html {
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
-  padding: 6px 14px 7px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--deep-text-soft);
-  font: 350 14px/1.3 var(--font-mono);
+  padding: 7px 16px 8px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: #fff;
+  color: var(--deep-text);
+  font: 500 14px/1.3 var(--font-ui);
   cursor: pointer;
   transition:
-    border-color 160ms ease,
     background-color 160ms ease,
     color 160ms ease;
 }
 .case-switch__item b {
-  color: var(--deep-text);
-  font-weight: 500;
+  color: inherit;
+  font-weight: 800;
 }
 .case-switch__item:hover {
-  border-color: #3a3b40;
-  background: var(--deep-surface-2);
+  background: var(--deep-sun);
 }
-.case-switch__item.is-active {
-  border-color: var(--deep-link);
-  background: rgba(0, 55, 194, 0.2);
+.case-switch__item.is-active,
+.case-switch__item.is-active:hover {
+  background: #000;
   color: #fff;
-}
-span.case-switch__item {
-  cursor: default;
-}
-span.case-switch__item:hover {
-  border-color: var(--deep-link);
-  background: rgba(0, 55, 194, 0.2);
 }
 .case-switch__item:focus-visible,
 .chip:focus-visible {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 3px;
 }
 .cases-card__tags {
@@ -408,21 +410,15 @@ span.case-switch__item:hover {
   list-style: none;
 }
 .cases-card__tags li {
-  padding: 3px 10px 4px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 6px;
-  color: var(--deep-text-soft);
-  font-size: 12px;
-  font-weight: 350;
-  line-height: 1.3;
+  padding: 4px 11px 5px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  color: var(--deep-text);
+  font: 600 12px/1.3 var(--font-ui);
   white-space: nowrap;
 }
 
 /* ───────────── Как мы работаем ───────────── */
-.process,
-.final-cta {
-  margin-top: 88px;
-}
 .process__heading {
   max-width: 760px;
 }
@@ -430,7 +426,7 @@ span.case-switch__item:hover {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
-  margin: 32px 0 0;
+  margin: 40px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -439,26 +435,38 @@ span.case-switch__item:hover {
   padding: 24px 24px 28px;
   border: 1px solid var(--deep-border);
   border-radius: var(--deep-radius-card);
-  background: var(--deep-surface);
+  background: #fff;
 }
+/* номер шага — наклейка цвета шага */
 .process-step__num {
-  display: block;
-  margin-bottom: 28px;
-  color: var(--deep-link);
-  font: 300 38px/1 var(--font-mono);
-  letter-spacing: -0.04em;
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  margin-bottom: 30px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-tile);
+  background: var(--accent);
+  color: var(--accent-on);
+  font: 900 40px / 1 var(--font-display);
+  letter-spacing: 0;
+  rotate: -4deg;
+}
+.process-step:nth-child(even) .process-step__num {
+  rotate: 3deg;
 }
 .process-step h3 {
   margin: 0;
   color: var(--deep-text);
-  font: 400 22px/1.2 var(--font-mono);
-  letter-spacing: -0.035em;
+  font: 900 32px / 0.95 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .process-step p {
-  margin: 10px 0 0;
-  color: var(--deep-muted);
+  margin: 12px 0 0;
+  color: var(--deep-text-soft);
   font-size: 15px;
-  font-weight: 350;
+  font-weight: 450;
   line-height: 1.5;
 }
 
@@ -467,105 +475,111 @@ span.case-switch__item:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-@media (max-width: 800px) {
-  .process,
-  .final-cta {
-    margin-top: 56px;
-  }
-  .process-step__num {
-    margin-bottom: 24px;
-  }
-}
 @media (max-width: 640px) {
   .process__steps {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-/* ───────────── Финальный призыв ───────────── */
+/* ───────────── Финальный призыв: фиолетовая полоса, текст белый ───────────── */
 .final-cta__inner {
   position: relative;
   display: grid;
   justify-items: start;
-  gap: 14px;
-  overflow: hidden;
-  padding: 56px clamp(24px, 24vw, 380px) 56px 56px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: var(--deep-radius-card);
-  background:
-    radial-gradient(
-      60% 130% at 100% 100%,
-      rgba(0, 55, 194, 0.6),
-      transparent 70%
-    ),
-    radial-gradient(45% 90% at 0 0, rgba(0, 55, 194, 0.2), transparent 70%),
-    var(--deep-surface);
+  gap: 20px;
+  padding: 0 clamp(0px, 26vw, 420px) 0 0;
 }
 .final-cta__art {
   position: absolute;
   top: 50%;
-  right: clamp(16px, 4vw, 72px);
-  width: clamp(190px, 19vw, 280px);
-  height: auto;
+  right: 0;
+  width: clamp(200px, 24vw, 340px);
   aspect-ratio: 1;
   translate: 0 -50%;
   pointer-events: none;
   user-select: none;
 }
-.final-cta h2 {
-  max-width: 860px;
-  margin: 0;
-  color: var(--deep-text);
-  font: 400 clamp(28px, 3.3vw, 46px) / 1.1 var(--font-mono);
-  letter-spacing: -0.045em;
-  text-wrap: balance;
+.final-cta__art .sticker {
+  --tile: #fff;
 }
-.final-cta h2 span {
-  color: var(--deep-link);
+.final-cta__art .sticker--quiz {
+  --s: 46%;
+  --r: -9deg;
+  top: 2%;
+  left: 4%;
+}
+.final-cta__art .sticker--trophy {
+  --s: 40%;
+  --r: 8deg;
+  top: 30%;
+  right: 0;
+  left: auto;
+}
+.final-cta__art .sticker--gift {
+  --s: 38%;
+  --r: -5deg;
+  top: 62%;
+  left: 14%;
+}
+.final-cta h2 {
+  max-width: 940px;
+  color: #fff;
+  font-size: clamp(52px, 7.6vw, 124px);
+  line-height: 0.88;
 }
 .final-cta p {
   max-width: 640px;
   margin: 0;
-  color: var(--deep-text-soft);
-  font-size: 16px;
-  font-weight: 350;
-  line-height: 1.5;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 450;
+  line-height: 1.45;
 }
 .final-cta__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 14px;
+  margin-top: 12px;
+}
+.final-cta .arrow-button {
+  background: #fff;
+  color: #000;
+}
+.final-cta .arrow-button:hover {
+  background: var(--deep-sun);
+  color: #000;
 }
 .final-cta__ghost {
   display: inline-flex;
-  min-height: 52px;
+  min-height: 50px;
   align-items: center;
-  padding: 8px 20px;
-  border: 1px solid var(--deep-border-2);
+  padding: 10px 24px;
+  border: 1px solid #fff;
   border-radius: var(--deep-radius-btn);
-  background: rgba(15, 15, 16, 0.4);
-  color: var(--deep-text);
-  font: 300 18px/1.25 var(--font-mono);
+  background: transparent;
+  color: #fff;
+  font: 700 13.5px/1.2 var(--font-ui);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
   transition:
     background-color 160ms ease,
-    border-color 160ms ease;
+    color 160ms ease;
 }
 .final-cta__ghost:hover {
-  border-color: #3a3b40;
-  background: var(--deep-surface-2);
+  background: #fff;
+  color: #000;
 }
 .final-cta__ghost:focus-visible,
 .final-cta .arrow-button:focus-visible {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid #fff;
   outline-offset: 3px;
 }
 @media (max-width: 800px) {
+  .final-cta__inner {
+    padding-right: 0;
+  }
   .final-cta__art {
     display: none;
-  }
-  .final-cta__inner {
-    padding: 32px 22px 30px;
   }
   .final-cta__actions {
     width: 100%;
@@ -573,26 +587,28 @@ span.case-switch__item:hover {
   .final-cta__actions > a {
     flex: 1 1 100%;
     justify-content: center;
-    font-size: 15px;
+    font-size: 12.5px;
   }
 }
 
 /* ───────────── Конфигуратор и аналитика: пометки ───────────── */
-.project-summary__note {
-  margin: 22px 0 0;
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 12px;
-  font-weight: 350;
+/* `>` нужен для веса селектора: иначе `.project-summary > p` из global.css перебивает отступ и размер */
+.project-summary > .project-summary__note {
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid rgb(255 255 255 / 0.28);
+  color: rgb(255 255 255 / 0.9);
+  font-size: 13px;
+  font-weight: 500;
   line-height: 1.5;
 }
 .analytics__demo {
   display: inline-flex;
-  margin-top: 14px;
-  padding: 4px 11px 5px;
-  border: 1px dashed var(--deep-border-2);
-  border-radius: 6px;
-  color: var(--deep-muted);
-  font-size: 12px;
-  font-weight: 350;
-  line-height: 1.3;
+  margin: 14px 0 12px;
+  padding: 5px 12px 6px;
+  border: 1px dashed var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: #fff;
+  color: var(--deep-text);
+  font: 600 12px/1.3 var(--font-ui);
 }

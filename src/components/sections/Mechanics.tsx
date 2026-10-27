@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { figmaAssets } from '@/lib/figma-assets';
-import { mechanicsCatalog, mechanicsLead, sharpImage } from '@/data/landing';
+import { mechanicsCatalog, mechanicsLead } from '@/data/landing';
 import { ArrowButton } from '@/components/ui/ArrowButton';
+import { ArrowIcon } from '@/components/ui/ArrowIcon';
 import { cssVars } from '@/lib/css-vars';
 import MechanicsQuiz from '@/components/sections/MechanicsQuiz';
 import MerchShopDemo, {
@@ -89,12 +90,10 @@ export default function Mechanics() {
           aria-label="Протестируйте механики — подбор за 3 вопроса"
           onClick={() => setQuizOpen(true)}
         >
-          <img
-            className="mechanics__decoration"
-            src={figmaAssets.mechanicsDecoration}
-            alt=""
-            aria-hidden="true"
-          />
+          <span className="mechanics__try-label" aria-hidden="true">
+            Протестируйте механики
+            <ArrowIcon className="mechanics__try-arrow" />
+          </span>
           <span className="mechanics__try-note" aria-hidden="true">
             Тест из 3 вопросов
           </span>
@@ -114,29 +113,18 @@ export default function Mechanics() {
               role="option"
               aria-selected={index === active}
               data-accent={item.accent}
-              data-spot
+              data-stagger
               data-reveal
               style={cssVars({ '--i': index })}
               onClick={() => setActive(index)}
             >
               <span className="mechanic-card__top">
-                {/* два слоя: мягкая иконка в покое и чёткая при наведении (как в «Для кого») */}
                 <span className="mechanic-art">
                   <img
-                    className="mechanic-art__soft"
                     src={iconForMechanic(item.icon)}
                     alt=""
                     width={256}
                     height={256}
-                    decoding="async"
-                  />
-                  <img
-                    className="mechanic-art__sharp"
-                    src={sharpImage(iconForMechanic(item.icon))}
-                    alt=""
-                    width={256}
-                    height={256}
-                    loading="lazy"
                     decoding="async"
                   />
                 </span>

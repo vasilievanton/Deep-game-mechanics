@@ -19,17 +19,16 @@ export const figmaAssets = {
   telegram: '/images/icons/star.svg',
   caseHero: '/images/case-hero.svg',
   caseProduct: '/images/case-hero.svg',
-  mechanicsDecoration: '/images/mechanics-decoration.png',
-  // Объёмные иконки механик (по одной на карточку каталога)
+  // Плоские иконки механик (по одной на карточку каталога, чёткие `-sharp`)
   mechanicIcons: {
-    quiz: '/images/mechanics/quiz.webp',
-    blocks: '/images/mechanics/blocks.webp',
-    plug: '/images/mechanics/plug.webp',
-    trophy: '/images/mechanics/trophy.webp',
-    learning: '/images/mechanics/learning.webp',
-    gift: '/images/mechanics/gift.webp',
-    video: '/images/mechanics/video.webp',
-    receipt: '/images/mechanics/receipt.webp',
+    quiz: '/images/mechanics/quiz-sharp.webp',
+    blocks: '/images/mechanics/blocks-sharp.webp',
+    plug: '/images/mechanics/plug-sharp.webp',
+    trophy: '/images/mechanics/trophy-sharp.webp',
+    learning: '/images/mechanics/learning-sharp.webp',
+    gift: '/images/mechanics/gift-sharp.webp',
+    video: '/images/mechanics/video-sharp.webp',
+    receipt: '/images/mechanics/receipt-sharp.webp',
   },
   configuratorIcons: [
     '/images/icons/target.svg',

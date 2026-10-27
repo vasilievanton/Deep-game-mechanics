@@ -24,7 +24,7 @@ import { ArrowIcon } from '@/components/ui/ArrowIcon';
 
 /** Размеры сцены в натуральных пикселях; на широком экране она масштабируется целиком. */
 const SCENE_WIDTH = 1340;
-const SCENE_HEIGHT = 450;
+const SCENE_HEIGHT = 464;
 const DESKTOP_QUERY = '(min-width: 1100px)';
 const TOTAL = heroCards.length;
 const HALF = Math.floor(TOTAL / 2);

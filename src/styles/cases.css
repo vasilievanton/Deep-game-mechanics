@@ -33,34 +33,33 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin: 0 0 20px -10px;
-  padding: 9px 14px 9px 10px;
-  border-radius: 8px;
-  color: var(--deep-muted);
-  font: 350 15px/1 var(--font-mono);
-  transition:
-    color 160ms ease,
-    background-color 160ms ease;
+  margin: 0 0 20px;
+  padding: 10px 18px 10px 12px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: #fff;
+  color: var(--deep-text);
+  font: 700 13px/1 var(--font-ui);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease;
 }
 .cases-page__back .arrow-icon {
   width: 18px;
   height: 18px;
 }
 .cases-page__back:hover {
-  background: var(--deep-surface-2);
-  color: var(--deep-text);
+  background: var(--deep-sun);
 }
 .cases-page__back:focus-visible {
-  outline: 2px solid var(--deep-link);
-  outline-offset: 2px;
+  outline: 3px solid var(--deep-focus);
+  outline-offset: 3px;
 }
 
 /* ───────────── Карточка кейса — ссылка ───────────── */
 .cases-card {
   position: relative;
-  transition:
-    transform 220ms ease,
-    box-shadow 220ms ease;
+  transition: translate 220ms ease;
 }
 .cases-card__kind {
   margin: 0;
@@ -104,8 +103,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .cases-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    translate: 0 -4px;
   }
   .cases-card:hover .cases-card__more .arrow-icon {
     translate: 4px 0;
@@ -117,6 +115,6 @@
     transition: none;
   }
   .cases-card:hover {
-    transform: none;
+    translate: none;
   }
 }

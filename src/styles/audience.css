@@ -1,21 +1,18 @@
 /* ───────────── Блок «Для кого мы собираем проекты» ─────────────
-   Компактный блок под «Кейсами»: шесть карточек-ссылок по три в ряд. В карточке заголовок и иконка в одной
-   строке, ниже короткая фраза, теги одной строкой через «·» и подпись с переходом к кейсу. Теги не
+   Компактный блок под «Кейсами»: шесть карточек-ссылок по три в ряд. В карточке заголовок и значок-наклейка
+   в одной строке, ниже короткая фраза, теги одной строкой через «·» и плашка с переходом к кейсу. Теги не
    разбиваем на плашки: так карточка вдвое ниже прежней, а смысл (из чего состоит задача) остаётся.
-   Иконки — плоские глифы с мягким размытым краем (как значки услуг на deep-agency.ru); у каждой задачи
-   свой цвет из палитры accent.css: карточка читает его из --accent / --accent-rgb (data-accent). При
-   наведении иконка становится чёткой: рядом с каждой лежит <имя>-sharp.webp той же формы и размера.
-   Вся карточка — одна кликабельная зона (ссылка в заголовке растягивается на карточку). */
+   У каждой задачи свой цвет из палитры accent.css (data-accent): им залита плашка-ссылка, а при наведении
+   бледным оттенком этого цвета подкрашивается вся карточка. Значки — плоские чёткие картинки на белых
+   плашках с чёрным контуром. Вся карточка — одна кликабельная зона (ссылка в заголовке растягивается). */
 
-.audience {
-  margin-top: 88px;
-}
 .audience__heading {
   max-width: 760px;
-  margin-bottom: 24px;
+  margin-bottom: clamp(28px, 3.4vw, 44px);
 }
 .audience__heading .section-lead {
   max-width: 640px;
+  margin: 20px 0 0;
 }
 
 .audience__grid {
@@ -25,7 +22,8 @@
 }
 
 .audience-card {
-  --art: 68px;
+  --art: 76px;
+  --tilt: -3deg;
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--art);
@@ -36,25 +34,23 @@
     'more more';
   align-content: start;
   align-items: start;
-  column-gap: 12px;
+  column-gap: 14px;
   min-height: 0;
-  padding: 20px 20px 18px 22px;
-  isolation: isolate;
+  padding: 22px 22px 20px 24px;
   cursor: pointer;
   border: 1px solid var(--deep-border);
   border-radius: var(--deep-radius-card);
   background: var(--deep-surface);
-  box-shadow: none;
-  transition:
-    border-color 180ms ease,
-    background-color 180ms ease;
+  transition: background-color 160ms ease;
+}
+.audience-card:nth-child(even) {
+  --tilt: 3deg;
 }
 .audience-card:hover {
-  border-color: rgb(var(--accent-rgb) / 0.42);
-  background: var(--deep-surface-2);
+  background: color-mix(in srgb, var(--accent) 26%, #fff);
 }
 .audience-card:has(.audience-card__link:focus-visible) {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 3px;
 }
 
@@ -66,14 +62,12 @@
   grid-area: title;
   min-height: 0;
   margin: 0;
-  padding-top: 4px;
+  padding-top: 2px;
   color: var(--deep-text);
-  font: 400 clamp(19px, 1.5vw, 22px) / 1.2 var(--font-mono);
-  letter-spacing: -0.03em;
+  font: 900 clamp(28px, 2.5vw, 36px) / 0.95 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
   text-wrap: balance;
-}
-.audience-card:hover h3 {
-  color: var(--deep-text);
 }
 .audience-card__link {
   color: inherit;
@@ -90,9 +84,9 @@
 }
 .audience-card p {
   grid-area: lead;
-  margin: 6px 0 0;
-  color: var(--deep-muted);
-  font: 400 14px / 1.45 var(--font-text);
+  margin: 10px 0 0;
+  color: var(--deep-text-soft);
+  font: 500 14.5px / 1.45 var(--font-ui);
 }
 .audience-card__tags {
   grid-area: tags;
@@ -102,22 +96,27 @@
   padding: 0;
   list-style: none;
   color: var(--deep-muted-2);
-  font: 350 12px / 1.6 var(--font-mono);
+  font: 600 12px / 1.6 var(--font-ui);
 }
 .audience-card__tags li:not(:last-child)::after {
   content: '·';
   margin: 0 7px;
-  opacity: 0.7;
 }
 .audience-card__more {
   grid-area: more;
   display: inline-flex;
   align-items: center;
   justify-self: start;
+  max-width: 100%;
   gap: 8px;
-  margin-top: 14px;
-  color: var(--accent);
-  font: 350 13.5px / 1.3 var(--font-mono);
+  margin-top: 16px;
+  padding: 7px 14px 7px 16px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: var(--accent);
+  color: var(--accent-on);
+  font: 700 12.5px / 1.3 var(--font-ui);
+  letter-spacing: 0.02em;
 }
 .audience-card__more .arrow-icon {
   width: 18px;
@@ -129,59 +128,33 @@
   translate: 4px 0;
 }
 
-/* Иконка — два слоя: мягкая (в покое) и чёткая. При наведении на карточку чёткая проявляется,
-   мягкая гаснет — как «наводка на резкость». Мягкая гаснет с небольшой задержкой (а при уходе
-   чёткая — тоже), чтобы в середине перехода иконка не становилась полупрозрачной. */
+/* значок-наклейка: при наведении на карточку выпрямляется и чуть вырастает */
 .audience-card__art {
   grid-area: art;
-  position: relative;
-  display: block;
+  display: grid;
   width: var(--art);
   height: var(--art);
-  margin: -6px -6px 0 0;
+  place-items: center;
+  padding: 11px;
+  border: 1px solid var(--deep-border);
+  border-radius: 22px;
+  background: #fff;
+  rotate: var(--tilt);
   pointer-events: none;
   user-select: none;
-  transition: transform 420ms cubic-bezier(0.3, 1.4, 0.5, 1);
+  transition:
+    rotate 220ms ease,
+    scale 220ms ease;
 }
 .audience-card__art img {
-  position: absolute;
-  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-.audience-card__art-soft {
-  opacity: 1;
-  transition: opacity 260ms ease;
-}
-.audience-card__art-sharp {
-  opacity: 0;
-  transition: opacity 260ms ease 100ms;
-}
 .audience-card:hover .audience-card__art {
-  transform: scale(1.08) rotate(-3deg);
-}
-@media (hover: hover) {
-  .audience-card:hover .audience-card__art-sharp {
-    opacity: 1;
-    transition-delay: 0ms;
-  }
-  .audience-card:hover .audience-card__art-soft {
-    opacity: 0;
-    transition-delay: 120ms;
-  }
-}
-/* то же при фокусе с клавиатуры (отдельным правилом: без :has() его просто пропустят) */
-@supports selector(:has(*)) {
-  .audience-card:has(:focus-visible) .audience-card__art-sharp {
-    opacity: 1;
-    transition-delay: 0ms;
-  }
-  .audience-card:has(:focus-visible) .audience-card__art-soft {
-    opacity: 0;
-    transition-delay: 120ms;
-  }
+  rotate: 0deg;
+  scale: 1.06;
 }
 
 /* ───────────── Плашка Telegram ───────────── */
@@ -209,8 +182,12 @@
     gap: 12px;
   }
   .audience-card {
-    --art: 60px;
+    --art: 64px;
     padding: 18px 16px 16px 18px;
+  }
+  .audience-card__art {
+    padding: 9px;
+    border-radius: 18px;
   }
   .audience .telegram-banner {
     gap: 12px;
@@ -221,13 +198,12 @@
 @media (prefers-reduced-motion: reduce) {
   .audience-card,
   .audience-card__art,
-  .audience-card__art-soft,
-  .audience-card__art-sharp,
   .audience-card__more .arrow-icon {
     transition: none;
   }
   .audience-card:hover .audience-card__art {
-    transform: none;
+    rotate: var(--tilt);
+    scale: none;
   }
   .audience-card:hover .audience-card__more .arrow-icon {
     translate: none;

@@ -4,20 +4,22 @@
    (--accent / --accent-rgb из accent.css), поэтому у каждой задачи свой оттенок графиков.
 
    Правила графиков: одна ось, тонкие метки, столбики не толще 24px со скруглённым концом 4px,
-   линии 2px, точки 8–10px с кольцом цвета карточки, сетка — тонкие сплошные линии, текст — цветом
-   текста (не цветом серии), статусы — цветом + значком + подписью. Подсказки работают и по
-   наведению, и с клавиатуры; у каждого графика есть таблица для скринридера.
+   линии 2px, точки 8–10px с белым кольцом, сетка — тонкие сплошные линии, текст — чёрным
+   (не цветом серии), статусы — цветом заливки + значком + подписью. Стиль Slush: карточки белые с
+   чёрным контуром, столбики и области залиты цветом задачи, у столбиков и сегментов чёрный контур 1px,
+   линии чёрные, ни теней, ни свечений. Подсказки работают и по наведению, и с клавиатуры;
+   у каждого графика есть таблица для скринридера.
    Подключается после brands.css и перед accent.css. */
 
 .analytics-dash {
-  --good: #4ddc7d;
-  --bad: #ff7a6e;
-  --warn: #ffbf5e;
-  --pending: #9aa3b8;
-  --card: #151516;
-  --track: rgb(255 255 255 / 0.07);
-  --grid: rgb(255 255 255 / 0.07);
-  --ink-3: #8b909c;
+  /* статусы — только заливки (на них чёрный значок или текст) */
+  --good: var(--deep-mint);
+  --bad: var(--deep-ember);
+  --warn: var(--deep-sun);
+  --pending: var(--deep-concrete);
+  --track: var(--deep-mist);
+  --grid: rgb(0 0 0 / 0.1);
+  --ink-3: #565656;
   position: relative;
 }
 .visually-hidden {
@@ -33,7 +35,7 @@
   white-space: nowrap;
 }
 .analytics-dash :focus-visible {
-  outline: 2px solid var(--deep-link);
+  outline: 3px solid var(--deep-focus);
   outline-offset: 3px;
 }
 
@@ -47,18 +49,15 @@
   gap: 8px;
 }
 .scenario-tabs button > i {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 7px;
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border: 1px solid var(--deep-border);
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 8px rgb(var(--accent-rgb) / 0.7);
 }
-.scenario-tabs button.is-selected,
-.scenario-tabs button.is-selected:hover {
-  background: rgb(var(--accent-rgb) / 0.16);
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.6);
-  color: #fff;
+.scenario-tabs button.is-selected > i {
+  border-color: #fff;
 }
 
 /* ───────────── Строка фильтров ───────────── */
@@ -72,9 +71,9 @@
 .dash-lead {
   max-width: 62ch;
   margin: 0;
-  color: var(--deep-muted);
+  color: var(--deep-text-soft);
   font-size: 14px;
-  font-weight: 350;
+  font-weight: 500;
   line-height: 1.5;
 }
 .dash-filters {
@@ -87,39 +86,39 @@
   display: inline-flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 10px;
+  border: 1px solid var(--deep-border);
+  border-radius: var(--deep-radius-btn);
+  background: #fff;
 }
 .dash-seg button,
 .dash-pause {
   min-height: 32px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border: 0;
-  border-radius: 7px;
+  border-radius: var(--deep-radius-btn);
   background: transparent;
-  color: var(--deep-muted);
-  font: 350 12.5px/1.2 var(--font-mono);
+  color: var(--deep-text);
+  font: 600 12.5px/1.2 var(--font-ui);
   cursor: pointer;
   transition:
     color 160ms ease,
-    background-color 160ms ease,
-    box-shadow 160ms ease;
+    background-color 160ms ease;
 }
 .dash-seg button:hover,
 .dash-pause:hover {
-  color: var(--deep-text);
+  background: var(--deep-sun);
 }
-.dash-seg button[aria-pressed='true'] {
-  background: rgb(var(--accent-rgb) / 0.18);
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.5);
-  color: var(--deep-text);
+.dash-seg button[aria-pressed='true'],
+.dash-seg button[aria-pressed='true']:hover {
+  background: #000;
+  color: #fff;
 }
 .dash-pause {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 10px;
+  border: 1px solid var(--deep-border);
+  background: #fff;
 }
 .dash-pause svg {
   width: 12px;
@@ -139,9 +138,9 @@ html:not(.motion-ok) .dash-pause {
   margin: 18px 0 20px;
 }
 .dash-caps__label {
-  color: var(--ink-3);
-  font-size: 12px;
-  font-weight: 350;
+  color: var(--deep-text-soft);
+  font-size: 12.5px;
+  font-weight: 600;
   line-height: 1.4;
 }
 .dash-caps ul {
@@ -158,34 +157,35 @@ html:not(.motion-ok) .dash-pause {
   gap: 8px;
   min-height: 34px;
   padding: 7px 14px;
-  border: 1px solid var(--deep-border-2);
+  border: 1px solid var(--deep-border);
   border-radius: 999px;
-  background: transparent;
-  color: var(--deep-text-soft);
-  font: 350 12.5px/1.2 var(--font-mono);
+  background: #fff;
+  color: var(--deep-text);
+  font: 600 12.5px/1.2 var(--font-ui);
   cursor: pointer;
   transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    color 180ms ease;
+    background-color 160ms ease,
+    color 160ms ease;
 }
 .dash-caps button::before {
   content: '';
-  width: 6px;
-  height: 6px;
-  flex: 0 0 6px;
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border: 1px solid var(--deep-border);
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 8px rgb(var(--accent-rgb) / 0.7);
 }
 .dash-caps button:hover {
-  border-color: rgb(var(--accent-rgb) / 0.55);
-  color: var(--deep-text);
+  background: color-mix(in srgb, var(--accent) 30%, #fff);
 }
-.dash-caps button[aria-pressed='true'] {
-  border-color: var(--accent);
-  background: rgb(var(--accent-rgb) / 0.16);
-  color: var(--deep-text);
+.dash-caps button[aria-pressed='true'],
+.dash-caps button[aria-pressed='true']:hover {
+  background: #000;
+  color: #fff;
+}
+.dash-caps button[aria-pressed='true']::before {
+  border-color: #fff;
 }
 
 /* ───────────── Сетка панели ───────────── */
@@ -225,33 +225,8 @@ html:not(.motion-ok) .dash-pause {
   border-radius: var(--deep-radius-card);
   background: var(--deep-surface);
   transition:
-    border-color 250ms ease,
-    opacity 250ms ease,
-    filter 250ms ease,
-    box-shadow 250ms ease;
-}
-.dash-card::after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    280px circle at var(--mx, 50%) var(--my, 50%),
-    rgb(var(--accent-rgb) / 0.11),
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity 300ms ease;
-  pointer-events: none;
-}
-@media (hover: hover) and (pointer: fine) {
-  .dash-card:hover {
-    border-color: var(--deep-border-2);
-  }
-  .dash-card:hover::after {
-    opacity: 1;
-  }
+    background-color 250ms ease,
+    opacity 250ms ease;
 }
 .dash-card__head {
   display: flex;
@@ -263,14 +238,14 @@ html:not(.motion-ok) .dash-pause {
 .dash-card__head h3 {
   margin: 0;
   color: var(--deep-text);
-  font: 400 15px/1.3 var(--font-mono);
+  font: 700 15.5px/1.3 var(--font-ui);
 }
 .dash-card__head p {
   flex-basis: 100%;
   margin: 0;
   color: var(--ink-3);
-  font-size: 12px;
-  font-weight: 350;
+  font-size: 12.5px;
+  font-weight: 500;
   line-height: 1.4;
 }
 .dash-live {
@@ -278,41 +253,41 @@ html:not(.motion-ok) .dash-pause {
   align-items: center;
   gap: 7px;
   margin-left: auto;
-  color: var(--deep-muted);
-  font: 500 10.5px/1 var(--font-mono);
+  color: var(--deep-text);
+  font: 700 10.5px/1 var(--font-ui);
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 .dash-live i {
   position: relative;
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--deep-border);
   border-radius: 50%;
   background: var(--accent);
 }
 .dash-note {
   margin: 16px 0 0;
-  color: var(--deep-muted);
+  color: var(--deep-text-soft);
   font-size: 12.5px;
-  font-weight: 350;
+  font-weight: 500;
   line-height: 1.5;
 }
 .dash-note b {
   color: var(--deep-text);
-  font-weight: 600;
+  font-weight: 700;
 }
 .dash-legend {
   margin: 14px 2px 0;
   color: var(--ink-3);
   font-size: 12px;
-  font-weight: 350;
+  font-weight: 500;
   line-height: 1.5;
 }
 
 /* ───────────── Подсветка возможности ───────────── */
 .dash[data-focus] .dash-card {
-  opacity: 0.36;
-  filter: saturate(0.5);
+  opacity: 0.4;
 }
 
 /* ───────────── Плитка показателя ───────────── */
@@ -325,9 +300,9 @@ html:not(.motion-ok) .dash-pause {
   overflow: hidden;
 }
 .dash-kpi__label {
-  color: var(--deep-muted);
-  font-size: 12px;
-  font-weight: 350;
+  color: var(--deep-text-soft);
+  font-size: 12.5px;
+  font-weight: 600;
   line-height: 1.35;
 }
 .dash-kpi__line {
@@ -338,9 +313,10 @@ html:not(.motion-ok) .dash-pause {
 }
 .dash-kpi__line strong {
   color: var(--deep-text);
-  font: 600 clamp(26px, 2.3vw, 34px) / 1.05 var(--font-mono);
+  font: 900 clamp(36px, 3.2vw, 46px) / 0.95 var(--font-display);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .dash-spark {
   display: block;
@@ -349,11 +325,11 @@ html:not(.motion-ok) .dash-pause {
   margin: auto -18px 0;
 }
 .dash-spark__fill {
-  fill: rgb(var(--accent-rgb) / 0.12);
+  fill: rgb(var(--accent-rgb) / 0.4);
 }
 .dash-spark__line {
   fill: none;
-  stroke: var(--accent);
+  stroke: var(--deep-text);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2;
@@ -362,20 +338,19 @@ html:not(.motion-ok) .dash-pause {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 7px 3px 6px;
-  border-radius: 6px;
-  background: rgb(77 220 125 / 0.12);
-  color: var(--good);
-  font: 500 11.5px/1.2 var(--font-mono);
+  padding: 3px 8px 3px 7px;
+  border: 1px solid var(--deep-border);
+  border-radius: 999px;
+  background: var(--good);
+  color: var(--deep-text);
+  font: 700 11.5px/1.2 var(--font-ui);
   white-space: nowrap;
 }
 .dash-delta[data-good='false'] {
-  background: rgb(255 122 110 / 0.13);
-  color: var(--bad);
+  background: var(--bad);
 }
 .dash-delta[data-flat='true'] {
-  background: rgb(255 255 255 / 0.06);
-  color: var(--deep-muted);
+  background: var(--deep-mist);
 }
 .dash-delta svg {
   flex: none;
@@ -394,13 +369,13 @@ html:not(.motion-ok) .dash-pause {
 .dash-hbar > i {
   display: block;
   height: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--deep-border);
+  border-left: 0;
   border-radius: 0 4px 4px 0;
   background: var(--accent);
   transform-origin: 0 50%;
   transition: width 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.dash-hbar[data-lead='true'] > i {
-  background: color-mix(in srgb, var(--accent), #fff 32%);
 }
 
 /* воронка: порядковая шкала — тот же оттенок, шаги светлеют к финалу */
@@ -423,9 +398,9 @@ html:not(.motion-ok) .dash-pause {
 }
 .dash-funnel__label {
   padding-right: 4px;
-  color: var(--deep-text-soft);
+  color: var(--deep-text);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 600;
   line-height: 1.3;
 }
 .dash-funnel .dash-hbar {
@@ -444,12 +419,12 @@ html:not(.motion-ok) .dash-pause {
 }
 .dash-funnel__val b {
   color: var(--deep-text);
-  font: 600 14px/1.2 var(--font-mono);
+  font: 700 14px/1.2 var(--font-ui);
 }
 .dash-funnel__val small {
   min-width: 46px;
-  color: var(--deep-muted);
-  font: 350 12px/1.2 var(--font-mono);
+  color: var(--deep-text-soft);
+  font: 500 12px/1.2 var(--font-ui);
   text-align: right;
 }
 .dash-callout {
@@ -458,25 +433,21 @@ html:not(.motion-ok) .dash-pause {
   gap: 10px;
   margin: 20px 0 0;
   padding: 12px 14px;
-  border: 1px solid rgb(var(--accent-rgb) / 0.3);
-  border-radius: 8px;
-  background: rgb(var(--accent-rgb) / 0.08);
-  color: var(--deep-text-soft);
+  border: 1px solid var(--deep-border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 24%, #fff);
+  color: var(--deep-text);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 500;
   line-height: 1.5;
 }
 .dash-callout svg {
   flex: none;
   margin-top: 2px;
-  color: var(--accent);
+  color: var(--deep-text);
 }
 .dash-callout[data-tone='warn'] {
-  border-color: rgb(255 191 94 / 0.34);
-  background: rgb(255 191 94 / 0.08);
-}
-.dash-callout[data-tone='warn'] svg {
-  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 45%, #fff);
 }
 
 /* список «название — столбик — число»: колонки общие для всех строк, чтобы дорожки совпадали */
@@ -501,9 +472,9 @@ html:not(.motion-ok) .dash-pause {
   min-width: 0;
   align-items: center;
   gap: 10px;
-  color: var(--deep-text-soft);
+  color: var(--deep-text);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 600;
   line-height: 1.3;
 }
 .dash-bars__val {
@@ -515,11 +486,11 @@ html:not(.motion-ok) .dash-pause {
 }
 .dash-bars__val b {
   color: var(--deep-text);
-  font: 600 14px/1.2 var(--font-mono);
+  font: 700 14px/1.2 var(--font-ui);
 }
 .dash-bars__val small {
   color: var(--ink-3);
-  font: 350 11.5px/1.3 var(--font-mono);
+  font: 500 11.5px/1.3 var(--font-ui);
   white-space: nowrap;
 }
 .dash-rank {
@@ -528,16 +499,21 @@ html:not(.motion-ok) .dash-pause {
   height: 22px;
   flex: 0 0 22px;
   place-items: center;
-  border-radius: 6px;
-  background: var(--deep-surface-2);
-  color: var(--deep-text-soft);
-  font: 600 11.5px/1 var(--font-mono);
+  border: 1px solid var(--deep-border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--deep-text);
+  font: 700 11.5px/1 var(--font-ui);
 }
 .dash-warn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: var(--warn);
+  padding: 2px 8px 2px 6px;
+  border: 1px solid var(--deep-border);
+  border-radius: 999px;
+  background: var(--warn);
+  color: var(--deep-text);
 }
 .dash-votes {
   display: flex;
@@ -550,18 +526,18 @@ html:not(.motion-ok) .dash-pause {
 .dash-reasons {
   margin-top: 22px;
   padding-top: 18px;
-  border-top: 1px solid var(--deep-border);
+  border-top: 1px solid var(--deep-hairline);
 }
 .dash-reasons h4 {
   margin: 0 0 16px;
-  color: var(--deep-text-soft);
-  font: 400 13px/1.3 var(--font-mono);
+  color: var(--deep-text);
+  font: 700 13px/1.3 var(--font-ui);
 }
 .dash-question {
   margin: 0 0 16px;
   color: var(--deep-text);
   font-size: 14px;
-  font-weight: 350;
+  font-weight: 500;
   line-height: 1.45;
 }
 
@@ -595,30 +571,29 @@ html.motion-ok .dash-board li {
   width: 22px;
   height: 22px;
   place-items: center;
-  border-radius: 6px;
-  background: var(--deep-surface-2);
-  color: var(--deep-text-soft);
-  font: 600 11.5px/1 var(--font-mono);
-  transition:
-    background-color 300ms ease,
-    color 300ms ease;
+  border: 1px solid var(--deep-border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--deep-text);
+  font: 700 11.5px/1 var(--font-ui);
+  transition: background-color 300ms ease;
 }
 .dash-board li[data-lead='true'] .dash-board__rank {
-  background: rgb(var(--accent-rgb) / 0.22);
-  color: var(--deep-text);
+  background: var(--accent);
+  color: var(--accent-on);
 }
 .dash-board__name {
   min-width: 0;
   overflow: hidden;
-  color: var(--deep-text-soft);
+  color: var(--deep-text);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .dash-board__pts {
   color: var(--deep-text);
-  font: 600 14px/1.2 var(--font-mono);
+  font: 700 14px/1.2 var(--font-ui);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -627,14 +602,18 @@ html.motion-ok .dash-board li {
   align-items: center;
   justify-content: flex-end;
   gap: 3px;
+  padding: 2px 6px;
+  border-radius: 999px;
   color: var(--ink-3);
-  font: 500 11.5px/1 var(--font-mono);
+  font: 700 11.5px/1 var(--font-ui);
 }
 .dash-board__move[data-dir='up'] {
-  color: var(--good);
+  background: var(--good);
+  color: var(--deep-text);
 }
 .dash-board__move[data-dir='down'] {
-  color: var(--bad);
+  background: var(--bad);
+  color: var(--deep-text);
 }
 
 /* ───────────── Столбцы по модулям ───────────── */
@@ -649,8 +628,7 @@ html.motion-ok .dash-board li {
   height: 180px;
   margin-top: 26px;
   padding: 0 6px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.16);
-  border-radius: 2px;
+  border-bottom: 1px solid var(--deep-border);
 }
 .dash-col {
   position: relative;
@@ -667,7 +645,7 @@ html.motion-ok .dash-board li {
   bottom: calc(var(--h) + 6px);
   left: 0;
   color: var(--deep-text);
-  font: 600 12px/1 var(--font-mono);
+  font: 700 12px/1 var(--font-ui);
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
@@ -675,13 +653,16 @@ html.motion-ok .dash-board li {
   display: block;
   width: min(100%, 24px);
   height: var(--h);
+  box-sizing: border-box;
+  border: 1px solid var(--deep-border);
+  border-bottom: 0;
   border-radius: 4px 4px 0 0;
   background: var(--accent);
   transform-origin: 50% 100%;
   transition: background-color 160ms ease;
 }
 .dash-col[data-active='true'] .dash-col__bar {
-  background: color-mix(in srgb, var(--accent), #fff 32%);
+  background: var(--deep-text);
 }
 .dash-cols__x {
   display: flex;
@@ -694,14 +675,14 @@ html.motion-ok .dash-board li {
   flex: 1;
   color: var(--ink-3);
   font-size: 12px;
-  font-weight: 350;
+  font-weight: 600;
   text-align: center;
 }
 .dash-cols__caption {
   margin: 12px 0 0;
   color: var(--ink-3);
   font-size: 12px;
-  font-weight: 350;
+  font-weight: 500;
   text-align: center;
 }
 
@@ -722,7 +703,7 @@ html.motion-ok .dash-board li {
   position: absolute;
   right: 0;
   color: var(--ink-3);
-  font: 350 11px/1 var(--font-mono);
+  font: 600 11px/1 var(--font-ui);
   translate: 0 -50%;
   white-space: nowrap;
 }
@@ -750,15 +731,15 @@ html.motion-ok .dash-board li {
   translate: 0 -0.5px;
 }
 .dash-grid--base {
-  background: rgb(255 255 255 / 0.16);
+  background: var(--deep-border);
 }
 .dash-area__fill {
-  fill: rgb(var(--accent-rgb) / 0.1);
+  fill: rgb(var(--accent-rgb) / 0.4);
   stroke: none;
 }
 .dash-area__line {
   fill: none;
-  stroke: var(--accent);
+  stroke: var(--deep-text);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2;
@@ -773,7 +754,7 @@ html.motion-ok .dash-board li {
   position: absolute;
   top: 0;
   color: var(--ink-3);
-  font: 350 11px/1.2 var(--font-mono);
+  font: 600 11px/1.2 var(--font-ui);
   translate: -50% 0;
   white-space: nowrap;
 }
@@ -788,23 +769,24 @@ html.motion-ok .dash-board li {
   width: 10px;
   height: 10px;
   margin: -5px 0 0 -5px;
+  box-sizing: border-box;
+  border: 2px solid var(--deep-border);
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 0 2px var(--card);
   pointer-events: none;
 }
 .dash-dot--hover {
   width: 12px;
   height: 12px;
   margin: -6px 0 0 -6px;
-  background: color-mix(in srgb, var(--accent), #fff 40%);
+  background: #fff;
 }
 .dash-cursor {
   position: absolute;
   top: 0;
   bottom: 0;
   width: 1px;
-  background: rgb(255 255 255 / 0.28);
+  background: rgb(0 0 0 / 0.3);
   pointer-events: none;
 }
 .dash-mark {
@@ -821,18 +803,18 @@ html.motion-ok .dash-board li {
   height: 8px;
   border-radius: 50%;
   background: var(--deep-text);
-  box-shadow: 0 0 0 2px var(--card);
+  outline: 2px solid #fff;
 }
 .dash-mark em {
   position: absolute;
   bottom: 10px;
   left: 0;
-  padding: 3px 7px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 5px;
-  background: #1a1b1d;
-  color: var(--deep-text-soft);
-  font: 500 10.5px/1.2 var(--font-mono);
+  padding: 3px 8px;
+  border: 1px solid var(--deep-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--deep-text);
+  font: 700 10.5px/1.2 var(--font-ui);
   translate: -50% 0;
   white-space: nowrap;
 }
@@ -854,11 +836,10 @@ html.motion-ok .dash-board li {
   z-index: 6;
   display: grid;
   gap: 3px;
-  padding: 8px 11px;
-  border: 1px solid var(--deep-border-2);
-  border-radius: 8px;
-  background: #1b1c1f;
-  box-shadow: 0 12px 28px rgb(0 0 0 / 0.5);
+  padding: 8px 12px;
+  border: 1px solid var(--deep-border);
+  border-radius: 12px;
+  background: #fff;
   pointer-events: none;
   translate: -50% calc(-100% - 12px);
   white-space: nowrap;
@@ -871,7 +852,7 @@ html.motion-ok .dash-board li {
 }
 .dash-tip small {
   color: var(--deep-muted);
-  font: 350 11px/1.2 var(--font-mono);
+  font: 600 11px/1.2 var(--font-ui);
 }
 .dash-tip span {
   display: flex;
@@ -880,11 +861,11 @@ html.motion-ok .dash-board li {
 }
 .dash-tip b {
   color: var(--deep-text);
-  font: 600 14px/1.2 var(--font-mono);
+  font: 700 14px/1.2 var(--font-ui);
 }
 .dash-tip em {
   color: var(--deep-muted);
-  font: 350 11.5px/1.2 var(--font-mono);
+  font: 500 11.5px/1.2 var(--font-ui);
   font-style: normal;
 }
 
@@ -898,6 +879,8 @@ html.motion-ok .dash-board li {
   min-width: 4px;
   flex-basis: 0;
   height: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--deep-border);
   border-radius: 2px;
   background: var(--c);
   transform-origin: 0 50%;
@@ -922,7 +905,7 @@ html.motion-ok .dash-board li {
   gap: 8px;
   padding: 13px 14px 14px;
   border: 1px solid var(--deep-border);
-  border-radius: 8px;
+  border-radius: 14px;
   font-variant-numeric: tabular-nums;
 }
 .dash-stack__name {
@@ -930,35 +913,48 @@ html.motion-ok .dash-board li {
   align-items: center;
   gap: 8px;
   min-width: 0;
-  color: var(--deep-text-soft);
+  color: var(--deep-text);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 600;
   line-height: 1.3;
 }
 .dash-stack__name > i {
-  width: 10px;
-  height: 10px;
-  flex: 0 0 10px;
+  width: 11px;
+  height: 11px;
+  flex: 0 0 11px;
+  border: 1px solid var(--deep-border);
   border-radius: 3px;
 }
 .dash-stack__legend b {
   color: var(--deep-text);
-  font: 600 clamp(24px, 2.3vw, 30px) / 1.05 var(--font-mono);
-  letter-spacing: -0.02em;
+  font: 900 clamp(32px, 3vw, 42px) / 0.95 var(--font-display);
+  letter-spacing: 0;
 }
 .dash-stack__legend small {
   color: var(--ink-3);
-  font: 350 12px/1.2 var(--font-mono);
+  font: 500 12px/1.2 var(--font-ui);
 }
+/* значок статуса: чёрный знак на заливке цвета статуса */
 .dash-stack__icon {
-  display: inline-flex;
-  color: var(--pending);
+  display: inline-grid;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  place-items: center;
+  border: 1px solid var(--deep-border);
+  border-radius: 50%;
+  background: var(--pending);
+  color: var(--deep-text);
 }
 .dash-stack__icon[data-status='ok'] {
-  color: var(--good);
+  background: var(--good);
 }
 .dash-stack__icon[data-status='bad'] {
-  color: var(--bad);
+  background: var(--bad);
+}
+.dash-stack__icon svg {
+  width: 12px;
+  height: 12px;
 }
 
 .dash-meter__head {
@@ -968,19 +964,19 @@ html.motion-ok .dash-board li {
   justify-content: space-between;
   gap: 4px 12px;
   margin-bottom: 9px;
-  color: var(--deep-text-soft);
+  color: var(--deep-text);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 600;
   line-height: 1.3;
 }
 .dash-meter__head b {
   color: var(--deep-text);
-  font: 600 14px/1.2 var(--font-mono);
+  font: 700 14px/1.2 var(--font-ui);
   font-variant-numeric: tabular-nums;
 }
 .dash-meter__head small {
-  color: var(--deep-muted);
-  font: 350 12px/1.2 var(--font-mono);
+  color: var(--deep-text-soft);
+  font: 500 12px/1.2 var(--font-ui);
 }
 .dash-meter__track {
   display: block;
@@ -992,6 +988,9 @@ html.motion-ok .dash-board li {
 .dash-meter__track i {
   display: block;
   height: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--deep-border);
+  border-left: 0;
   border-radius: 0 4px 4px 0;
   background: var(--accent);
   transform-origin: 0 50%;
@@ -1003,9 +1002,9 @@ html.motion-ok .dash-board li {
   gap: 8px;
 }
 .dash-meter[data-big='true'] .dash-meter__head b {
-  font-size: clamp(40px, 4.4vw, 52px);
-  line-height: 1;
-  letter-spacing: -0.04em;
+  font: 900 clamp(56px, 5.6vw, 80px) / 0.9 var(--font-display);
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .dash-meter[data-big='true'] .dash-meter__head small {
   font-size: 15px;
@@ -1019,12 +1018,12 @@ html.motion-ok .dash-board li {
   gap: 16px;
   margin-top: 22px;
   padding-top: 20px;
-  border-top: 1px solid var(--deep-border);
+  border-top: 1px solid var(--deep-hairline);
 }
 .dash-card .dash-meter + .dash-bars {
   margin-top: 22px;
   padding-top: 20px;
-  border-top: 1px solid var(--deep-border);
+  border-top: 1px solid var(--deep-hairline);
 }
 
 .dash-hero {
@@ -1036,14 +1035,15 @@ html.motion-ok .dash-board li {
 }
 .dash-hero strong {
   color: var(--deep-text);
-  font: 600 clamp(42px, 4.6vw, 56px) / 1 var(--font-mono);
+  font: 900 clamp(60px, 6.4vw, 90px) / 0.9 var(--font-display);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .dash-hero > span {
-  color: var(--deep-muted);
+  color: var(--deep-text-soft);
   font-size: 14px;
-  font-weight: 350;
+  font-weight: 600;
 }
 
 /* ───────────── Эфир (мероприятия) ───────────── */
@@ -1062,26 +1062,27 @@ html.motion-ok .dash-board li {
   gap: 6px;
 }
 .dash-stream__now small {
-  color: var(--deep-muted);
-  font-size: 12px;
-  font-weight: 350;
+  color: var(--deep-text-soft);
+  font-size: 12.5px;
+  font-weight: 600;
 }
 .dash-stream__now strong {
   color: var(--deep-text);
-  font: 600 clamp(52px, 5.6vw, 68px) / 1 var(--font-mono);
+  font: 900 clamp(72px, 7.6vw, 108px) / 0.9 var(--font-display);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 .dash-stream__now > span {
-  color: var(--deep-muted);
+  color: var(--deep-text-soft);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 500;
 }
 .dash-stream__plot {
   position: relative;
   grid-area: plot;
   height: 120px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.16);
+  border-bottom: 1px solid var(--deep-border);
 }
 .dash-stream__plot svg {
   position: absolute;
@@ -1097,18 +1098,20 @@ html.motion-ok .dash-board li {
   gap: 12px;
   margin: 0;
   padding-top: 18px;
-  border-top: 1px solid var(--deep-border);
+  border-top: 1px solid var(--deep-hairline);
 }
 .dash-stream__stats dt {
-  color: var(--deep-muted);
-  font-size: 12px;
-  font-weight: 350;
+  color: var(--deep-text-soft);
+  font-size: 12.5px;
+  font-weight: 600;
 }
 .dash-stream__stats dd {
   margin: 4px 0 0;
   color: var(--deep-text);
-  font: 600 clamp(18px, 1.8vw, 22px) / 1.2 var(--font-mono);
+  font: 900 clamp(28px, 2.8vw, 38px) / 1 var(--font-display);
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 /* ───────────── Лента чеков (трейд-маркетинг) ───────────── */
@@ -1125,39 +1128,40 @@ html.motion-ok .dash-board li {
   grid-template-columns: 30px minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  border-top: 1px solid var(--deep-border);
+  border-top: 1px solid var(--deep-hairline);
 }
 .dash-feed li:first-child {
   border-top: 0;
 }
 .dash-feed li[data-status='ok'] {
-  --s: 77 220 125;
+  --st: var(--good);
 }
 .dash-feed li[data-status='wait'] {
-  --s: 154 163 184;
+  --st: var(--pending);
 }
 .dash-feed li[data-status='bad'] {
-  --s: 255 122 110;
+  --st: var(--bad);
 }
 .dash-feed__icon {
   display: grid;
   width: 30px;
   height: 30px;
   place-items: center;
-  border-radius: 8px;
-  background: rgb(var(--s) / 0.14);
-  color: rgb(var(--s));
+  border: 1px solid var(--deep-border);
+  border-radius: 50%;
+  background: var(--st);
+  color: var(--deep-text);
 }
 .dash-feed__text {
   min-width: 0;
-  color: var(--deep-text-soft);
+  color: var(--deep-text);
   font-size: 13px;
-  font-weight: 350;
+  font-weight: 500;
   line-height: 1.35;
 }
 .dash-feed small {
   color: var(--ink-3);
-  font: 350 12px/1.2 var(--font-mono);
+  font: 600 12px/1.2 var(--font-ui);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -1258,7 +1262,7 @@ html.motion-ok .dash-live i::after {
   content: '';
   position: absolute;
   inset: -2px;
-  border: 2px solid var(--accent);
+  border: 2px solid var(--deep-border);
   border-radius: 50%;
   animation: dash-ping 2s ease-out infinite;
 }
@@ -1409,10 +1413,6 @@ html.motion-ok .dash-feed li {
 .dash[data-focus='points'] .dash-card[data-cap~='points'],
 .dash[data-focus='fund'] .dash-card[data-cap~='fund'],
 .dash[data-focus='control'] .dash-card[data-cap~='control'] {
-  border-color: rgb(var(--accent-rgb) / 0.6);
-  box-shadow:
-    0 0 0 1px rgb(var(--accent-rgb) / 0.22),
-    0 18px 46px -26px rgb(var(--accent-rgb) / 0.6);
+  background: color-mix(in srgb, var(--accent) 22%, #fff);
   opacity: 1;
-  filter: none;
 }

@@ -3,11 +3,7 @@ import { figmaAssets } from '@/lib/figma-assets';
 import { openContact } from '@/lib/contact';
 import { IconTile } from '@/components/ui/IconTile';
 import { ArrowIcon } from '@/components/ui/ArrowIcon';
-import {
-  buildExample,
-  defaultSelection,
-  questions,
-} from '@/data/configurator';
+import { buildExample, defaultSelection, questions } from '@/data/configurator';
 
 /** Номер вопроса «Что добавить?» — единственный с множественным выбором. */
 const MODULES_QUESTION = 2;
@@ -16,7 +12,9 @@ function isDefault(selection: readonly (readonly number[])[]) {
   return selection.every(
     (items, index) =>
       items.length === defaultSelection[index].length &&
-      items.every((value, position) => value === defaultSelection[index][position]),
+      items.every(
+        (value, position) => value === defaultSelection[index][position],
+      ),
   );
 }
 
@@ -148,14 +146,18 @@ export default function Configurator() {
             </div>
             <div className="summary-facts">
               <div>
-                <b aria-hidden="true">▦</b>
+                <IconTile>
+                  <img src={figmaAssets.configuratorIcons[2]} alt="" />
+                </IconTile>
                 <span>
                   Состав проекта
                   <strong>{example.compositionText}</strong>
                 </span>
               </div>
               <div>
-                <b aria-hidden="true">♟</b>
+                <IconTile>
+                  <img src={figmaAssets.configuratorIcons[1]} alt="" />
+                </IconTile>
                 <span>
                   Масштаб проекта
                   <strong>{example.scaleText}</strong>

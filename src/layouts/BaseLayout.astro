@@ -2,6 +2,7 @@
 import '@/styles/main.css';
 import Motion from '@/components/ui/Motion';
 import ContactDialog from '@/components/ui/ContactDialog';
+import Marquee from '@/components/ui/Marquee.astro';
 
 interface Props {
   title: string;
@@ -17,8 +18,22 @@ const { title, description, lang = 'ru' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0f0f10" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#000000" />
+    {[
+      'sofia-sans-extra-condensed-cyrillic-wght-normal',
+      'sofia-sans-extra-condensed-latin-wght-normal',
+      'inter-cyrillic-wght-normal',
+      'inter-latin-wght-normal',
+    ].map((font) => (
+      <link
+        rel="preload"
+        href={`/fonts/${font}.woff2`}
+        as="font"
+        type="font/woff2"
+        crossorigin
+      />
+    ))}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
   </head>
@@ -30,6 +45,7 @@ const { title, description, lang = 'ru' } = Astro.props;
         document.documentElement.classList.add('motion-ok');
       }
     </script>
+    <Marquee />
     <slot />
     <ContactDialog client:load />
     <Motion client:load />
