@@ -633,7 +633,7 @@
   text-align: center;
 }
 
-/* ───────────── Управление: стрелки, точки с индикатором автопрокрутки, пауза ───────────── */
+/* ───────────── Управление: стрелки и точки с индикатором автопрокрутки ───────────── */
 .showcase {
   /* сколько держится слайд при автопрокрутке */
   --autoplay: 5200ms;
@@ -645,8 +645,7 @@
   gap: 4px;
   margin-top: 18px;
 }
-.showcase__arrow,
-.showcase__playpause {
+.showcase__arrow {
   display: grid;
   place-items: center;
   width: 40px;
@@ -662,8 +661,7 @@
     background-color 180ms ease,
     border-color 180ms ease;
 }
-.showcase__arrow:hover,
-.showcase__playpause:hover {
+.showcase__arrow:hover {
   border-color: rgba(255, 255, 255, 0.55);
   background: rgba(255, 255, 255, 0.12);
 }
@@ -671,11 +669,7 @@
   width: 18px;
   height: 18px;
 }
-.showcase__playpause {
-  margin-left: 10px;
-}
 .showcase__arrow:focus-visible,
-.showcase__playpause:focus-visible,
 .showcase__dot:focus-visible {
   outline: 2px solid #6c95ff;
   outline-offset: 2px;
@@ -696,19 +690,20 @@
   cursor: pointer;
   transition: width 240ms ease;
 }
+/* Кружок и полоска прижаты к левому краю (x = 9px) и растут вправо: так заливка всегда стартует ровно с левого
+   конца полоски, пока кнопка меняет ширину с 28 до 54px. */
 .showcase__dot::before {
   content: '';
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 9px;
   width: 10px;
   height: 10px;
-  margin: -5px 0 0 -5px;
+  margin-top: -5px;
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.34);
   transition:
     width 240ms ease,
-    margin 240ms ease,
     background-color 200ms ease;
 }
 .showcase__dot:hover::before {
@@ -716,37 +711,33 @@
 }
 /* активная точка вытягивается в полоску; в неё «наливается» время до следующего слайда */
 .showcase__dot[aria-current='true'] {
-  width: 52px;
+  width: 54px;
 }
 .showcase__dot[aria-current='true']::before {
   width: 36px;
-  margin-left: -18px;
   background: rgba(255, 255, 255, 0.28);
 }
+/* Заливка растёт по ширине, а не масштабом: при scaleX скругления сплющивались и край был то овальным,
+   то плоским. Ширина от 10px (круг) до 36px (вся полоска) даёт овал с обоих концов на любом проценте. */
 .showcase__dot-fill {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 9px;
   width: 36px;
   height: 10px;
-  margin: -5px 0 0 -18px;
+  margin-top: -5px;
   border-radius: 5px;
   background: #fff;
-  transform-origin: 0 50%;
 }
 html.motion-ok .showcase__dot-fill {
   animation: showcase-dot-fill var(--autoplay) linear both;
 }
-/* автопрокрутка выключена кнопкой — активная точка просто залита целиком */
-html.motion-ok .showcase[data-playing='false'] .showcase__dot-fill {
-  animation: none;
-}
 @keyframes showcase-dot-fill {
   from {
-    transform: scaleX(0);
+    width: 10px;
   }
   to {
-    transform: scaleX(1);
+    width: 36px;
   }
 }
 .showcase__card:focus-visible {
@@ -805,25 +796,18 @@ html.motion-ok .showcase[data-playing='false'] .showcase__dot-fill {
 }
 
 @media (max-width: 360px) {
-  .showcase__arrow,
-  .showcase__playpause {
+  .showcase__arrow {
     width: 36px;
     height: 36px;
   }
-  .showcase__playpause {
-    margin-left: 6px;
-  }
 }
 
-/* без анимаций автопрокрутки нет: кнопка паузы не нужна, активная точка залита целиком */
+/* без анимаций автопрокрутки нет, активная точка залита целиком */
 @media (prefers-reduced-motion: reduce) {
   .showcase__card,
   .showcase__card::after,
   .showcase__dot,
   .showcase__dot::before {
     transition: none;
-  }
-  .showcase__playpause {
-    display: none;
   }
 }

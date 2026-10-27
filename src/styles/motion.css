@@ -284,14 +284,40 @@ html.motion-ok .mechanics__decoration {
 .mechanic-art img {
   transition:
     scale 360ms cubic-bezier(0.3, 1.5, 0.5, 1),
-    rotate 360ms cubic-bezier(0.3, 1.5, 0.5, 1);
+    rotate 360ms cubic-bezier(0.3, 1.5, 0.5, 1),
+    opacity 260ms ease;
 }
 .mechanic-card:hover .mechanic-art img {
   scale: 1.12;
   rotate: -6deg;
 }
-/* выбранная карточка и крупная иконка справа «выскакивают» при смене */
-html.motion-ok .mechanic-card.is-active .mechanic-art img {
+/* Иконка в карточке — два слоя, как в «Для кого»: мягкая в покое, чёткая при наведении мыши и при фокусе
+   с клавиатуры («наводка на резкость»). Мягкая гаснет с небольшой задержкой, а чёткая при уходе — тоже,
+   чтобы в середине перехода иконка не становилась полупрозрачной. */
+.mechanic-art .mechanic-art__sharp {
+  transition-delay: 0ms, 0ms, 100ms;
+}
+@media (hover: hover) {
+  .mechanic-card:hover .mechanic-art__sharp {
+    opacity: 1;
+    transition-delay: 0ms;
+  }
+  .mechanic-card:hover .mechanic-art__soft {
+    opacity: 0;
+    transition-delay: 0ms, 0ms, 120ms;
+  }
+}
+.mechanic-card:focus-visible .mechanic-art__sharp {
+  opacity: 1;
+  transition-delay: 0ms;
+}
+.mechanic-card:focus-visible .mechanic-art__soft {
+  opacity: 0;
+  transition-delay: 0ms, 0ms, 120ms;
+}
+/* выбранная карточка и крупная иконка справа «выскакивают» при смене
+   (выскакивает обёртка с обоими слоями, чтобы чёткий слой не мелькал отдельно) */
+html.motion-ok .mechanic-card.is-active .mechanic-art {
   animation: icon-pop 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) backwards;
 }
 html.motion-ok .mechanic-detail__head .mechanic-art {
@@ -409,6 +435,9 @@ html.motion-ok .final-cta__inner[data-in] .arrow-button {
     translate: none;
     scale: none;
     rotate: none;
+  }
+  .mechanic-art img {
+    transition: none;
   }
   .site-header__progress {
     transition: none;

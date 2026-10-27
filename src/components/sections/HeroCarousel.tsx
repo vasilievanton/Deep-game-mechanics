@@ -18,7 +18,8 @@ import { ArrowIcon } from '@/components/ui/ArrowIcon';
  * поэтому уходящая карточка перепрыгивает на другую сторону незаметно.
  * Автопрокрутку ведёт CSS-анимация заполнения активной точки: когда она закончилась — следующий слайд.
  * Так индикатор всегда совпадает с таймером, а пауза (наведение, фокус с клавиатуры, перетаскивание,
- * кнопка) — это просто `animation-play-state`.
+ * слайдер вне экрана) — это просто `animation-play-state`. Отдельной кнопки паузы нет: слайдер сам
+ * встаёт на паузу, пока с ним взаимодействуют.
  */
 
 /** Размеры сцены в натуральных пикселях; на широком экране она масштабируется целиком. */
@@ -395,33 +396,11 @@ function ShowcaseCard({
   );
 }
 
-function PauseIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-      <rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor" />
-      <rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor" />
-    </svg>
-  );
-}
-
-function PlayIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-      <path
-        d="M8 5.2v13.6a.8.8 0 0 0 1.2.7l10.6-6.8a.8.8 0 0 0 0-1.4L9.2 4.5A.8.8 0 0 0 8 5.2Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
 export function HeroCarousel() {
   const stageRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(INITIAL_ACTIVE);
-  /** Кнопка «Пауза»: человек сам остановил автопрокрутку. */
-  const [playing, setPlaying] = useState(true);
-  /** Временная пауза: мышь над слайдером, фокус с клавиатуры внутри, перетаскивание. */
+  /** Пауза автопрокрутки: мышь над слайдером, фокус с клавиатуры внутри, перетаскивание, слайдер вне экрана. */
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -574,7 +553,6 @@ export function HeroCarousel() {
       role="region"
       aria-roledescription="carousel"
       aria-label="Возможности платформы"
-      data-playing={playing ? 'true' : 'false'}
       onKeyDown={onKeyDown}
       onPointerEnter={(event) => {
         if (event.pointerType === 'mouse') setHovered(true);
@@ -668,16 +646,6 @@ export function HeroCarousel() {
           onClick={() => goTo(active + 1)}
         >
           <ArrowIcon direction="right" />
-        </button>
-        <button
-          type="button"
-          className="showcase__playpause"
-          aria-label={
-            playing ? 'Остановить автопрокрутку' : 'Включить автопрокрутку'
-          }
-          onClick={() => setPlaying((value) => !value)}
-        >
-          {playing ? <PauseIcon /> : <PlayIcon />}
         </button>
       </div>
     </div>

@@ -1010,6 +1010,15 @@ body {
 .mechanic-art img {
   filter: none;
 }
+/* в карточке иконка в два слоя: мягкая в покое и чёткая при наведении (переключение — в motion.css) */
+.mechanic-art {
+  position: relative;
+}
+.mechanic-art__sharp {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
 .mechanic-art--detail {
   width: 76px;
   height: 76px;
