@@ -98,19 +98,7 @@
   outline-offset: 2px;
 }
 
-/* ───────────── Для кого ───────────── */
-.audience .audience-card__more {
-  color: var(--accent);
-}
-
-/* ───────────── Механики ───────────── */
-.mechanic-card:not(.is-active):hover {
-  border-color: rgb(var(--accent-rgb) / 0.4);
-  box-shadow: 0 16px 40px rgb(var(--accent-rgb) / 0.14);
-}
-.mechanic-detail[data-accent] .mechanic-detail__label {
-  color: var(--accent);
-}
+/* ───────────── Механики: свечение крупной иконки в панели (остальное — в mechanics.css) ───────────── */
 .mechanic-detail[data-accent] .mechanic-art--detail {
   filter: drop-shadow(0 0 16px rgb(var(--accent-rgb) / 0.4));
 }
@@ -130,12 +118,10 @@
   background: #fff;
   box-shadow: none;
 }
-.benefits-panel[data-accent] .icon-tile,
 .builder-question[data-accent] .icon-tile {
   border-color: rgb(var(--accent-rgb) / 0.38);
   background: rgb(var(--accent-rgb) / 0.14);
 }
-.benefits-panel[data-accent] .icon-tile img,
 .builder-question[data-accent] .icon-tile img {
   filter: brightness(0) invert(1)
     drop-shadow(0 0 7px rgb(var(--accent-rgb) / 0.85));

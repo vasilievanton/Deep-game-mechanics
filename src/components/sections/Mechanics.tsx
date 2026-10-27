@@ -17,14 +17,18 @@ function iconForMechanic(icon: string) {
 function mechanicIndexFromHash() {
   if (typeof window === 'undefined') return 0;
   if (window.location.hash === '#integrations') {
-    const index = mechanicsCatalog.findIndex((item) => item.id === 'integrations');
+    const index = mechanicsCatalog.findIndex(
+      (item) => item.id === 'integrations',
+    );
     return index >= 0 ? index : 0;
   }
   return 0;
 }
 
 function selectIntegrationsIndex() {
-  const index = mechanicsCatalog.findIndex((item) => item.id === 'integrations');
+  const index = mechanicsCatalog.findIndex(
+    (item) => item.id === 'integrations',
+  );
   return index >= 0 ? index : 0;
 }
 
@@ -47,8 +51,12 @@ export default function Mechanics() {
         setActive(selectIntegrationsIndex());
       }
       // Ссылки с data-mechanic-id (например, чип «Своя механика» на первом экране) открывают эту возможность.
-      const id = target?.closest('[data-mechanic-id]')?.getAttribute('data-mechanic-id');
-      const index = id ? mechanicsCatalog.findIndex((item) => item.id === id) : -1;
+      const id = target
+        ?.closest('[data-mechanic-id]')
+        ?.getAttribute('data-mechanic-id');
+      const index = id
+        ? mechanicsCatalog.findIndex((item) => item.id === id)
+        : -1;
       if (index >= 0) setActive(index);
     }
     applyHash();
@@ -133,8 +141,12 @@ export default function Mechanics() {
                   />
                 </span>
               </span>
-              <strong>{item.title}</strong>
-              <span className="mechanic-card__description">{item.summary}</span>
+              <span className="mechanic-card__text">
+                <strong>{item.title}</strong>
+                <span className="mechanic-card__description">
+                  {item.summary}
+                </span>
+              </span>
             </button>
           ))}
         </div>
@@ -165,7 +177,12 @@ export default function Mechanics() {
           ) : null}
           <div className="mechanic-detail__body">
             <span className="mechanic-detail__label">Возможности</span>
-            <ul key={current.id}>
+            <ul
+              key={current.id}
+              className={
+                current.capabilities.length > 5 ? 'is-wide' : undefined
+              }
+            >
               {current.capabilities.map((item, index) => (
                 <li key={item} style={cssVars({ '--i': index })}>
                   {item}

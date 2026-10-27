@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
-import { figmaAssets } from '@/lib/figma-assets';
 import {
   caseBrand,
   caseCategories,
   cases,
   type CaseCategoryId,
 } from '@/data/landing';
-import { IconTile } from '@/components/ui/IconTile';
 import { ArrowButton } from '@/components/ui/ArrowButton';
 import { ArrowIcon } from '@/components/ui/ArrowIcon';
-import { cssVars } from '@/lib/css-vars';
 
 export default function CaseStudy() {
   const [activeCategory, setActiveCategory] = useState<CaseCategoryId>(
@@ -20,9 +17,7 @@ export default function CaseStudy() {
   const category =
     caseCategories.find((item) => item.id === activeCategory) ??
     caseCategories[0];
-  const categoryCases = cases.filter(
-    (item) => item.categoryId === category.id,
-  );
+  const categoryCases = cases.filter((item) => item.categoryId === category.id);
   const current =
     categoryCases.find((item) => item.id === activeCaseId) ?? categoryCases[0];
 
@@ -52,7 +47,9 @@ export default function CaseStudy() {
   useEffect(() => {
     function openFromHash() {
       const match = /^#case-([\w-]+)$/.exec(window.location.hash);
-      const item = match ? cases.find((entry) => entry.id === match[1]) : undefined;
+      const item = match
+        ? cases.find((entry) => entry.id === match[1])
+        : undefined;
       if (!item) return;
       setActiveCategory(item.categoryId);
       setActiveCaseId(item.id);
@@ -62,7 +59,10 @@ export default function CaseStudy() {
     return () => window.removeEventListener('hashchange', openFromHash);
   }, []);
 
-  function onTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+  function onTabKeyDown(
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) {
     const last = caseCategories.length - 1;
     const next =
       event.key === 'ArrowRight'
@@ -81,11 +81,7 @@ export default function CaseStudy() {
   }
 
   return (
-    <section
-      className="case-study"
-      id="cases"
-      aria-labelledby="case-heading"
-    >
+    <section className="case-study" id="cases" aria-labelledby="case-heading">
       <div className="case-study__inner">
         <div className="case-study__heading-row" data-reveal>
           <div>
@@ -95,8 +91,8 @@ export default function CaseStudy() {
               <span>по задачам</span>
             </h2>
             <p className="section-lead">
-              Выберите задачу — покажем похожий проект: что получили
-              участники и из чего он собран.
+              Выберите задачу — покажем проект: что нужно было сделать, что
+              собрали и чем всё закончилось.
             </p>
           </div>
           <a className="compact-cta" href="/cases">
@@ -176,36 +172,6 @@ export default function CaseStudy() {
           role="tabpanel"
           aria-labelledby={`case-tab-${category.id}`}
         >
-          <div className="benefits-panel" data-accent={category.accent}>
-            <div className="benefits-panel__heading">
-              <h3>{category.title}</h3>
-              <p>{category.lead}</p>
-            </div>
-            <div className="benefits-list" key={category.id}>
-              {category.benefits.map((item, index) => (
-                <div
-                  className="benefit-row"
-                  key={item.title}
-                  style={cssVars({ '--i': index })}
-                >
-                  <IconTile>
-                    <img
-                      src={
-                        figmaAssets.benefitIcons[
-                          index % figmaAssets.benefitIcons.length
-                        ]
-                      }
-                      alt=""
-                    />
-                  </IconTile>
-                  <div>
-                    <strong>{item.title}</strong>
-                    <p>{item.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
           <article
             className={`case-visual case-visual--${current.artwork} case-visual--cover case-visual--brand`}
             data-brand={current.theme}
@@ -221,54 +187,25 @@ export default function CaseStudy() {
                 height={1024}
                 decoding="async"
               />
-              <span className="case-visual__shade" />
             </div>
             <div className="case-visual__meta" key={category.id}>
               КЕЙС <span>•</span> {category.title.toLocaleUpperCase('ru-RU')}
             </div>
-            <div className="case-visual__copy" key={current.id}>
-              <header className="case-visual__head">
-                <h3>
-                  {current.brand}
-                  {current.brandNote ? (
-                    <>
-                      {' '}
-                      <small className="case-visual__brand-note">
-                        ({current.brandNote})
-                      </small>
-                    </>
-                  ) : null}
-                </h3>
-                <h4>{current.title}</h4>
-                <p>{current.description}</p>
-              </header>
-
-              <dl className="case-facts">
-                <div className="case-facts__task">
-                  <dt>Задача</dt>
-                  <dd>{current.task}</dd>
-                </div>
-                <div className="case-facts__metrics">
-                  <div>
-                    <dt>Масштаб</dt>
-                    <dd>{current.scale}</dd>
-                  </div>
-                  <div>
-                    <dt>Продолжительность</dt>
-                    <dd>{current.duration}</dd>
-                  </div>
-                </div>
-              </dl>
-
-              <div className="case-stats" aria-label="Ключевые результаты">
-                {current.results.map((item) => (
-                  <div key={`${item.value}-${item.label}`}>
-                    <strong>{item.value}</strong>
-                    <small>{item.label}</small>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <header className="case-visual__head" key={current.id}>
+              <h3>
+                {current.brand}
+                {current.brandNote ? (
+                  <>
+                    {' '}
+                    <small className="case-visual__brand-note">
+                      ({current.brandNote})
+                    </small>
+                  </>
+                ) : null}
+              </h3>
+              <h4>{current.title}</h4>
+              <p>{current.description}</p>
+            </header>
             <div className="case-visual__cta">
               <ArrowButton
                 href="#configurator"
@@ -281,6 +218,53 @@ export default function CaseStudy() {
               </ArrowButton>
             </div>
           </article>
+          <div
+            className="case-story"
+            data-accent={category.accent}
+            key={current.id}
+          >
+            <section className="case-story__block">
+              <h5 className="case-story__label">Задача</h5>
+              <p>{current.task}</p>
+            </section>
+            <section className="case-story__block">
+              <h5 className="case-story__label">Что собрали</h5>
+              <ul className="case-story__list" role="list">
+                {current.built.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+            <section className="case-story__block">
+              <h5 className="case-story__label">Итог</h5>
+              {current.outcome.some((item) => item.value) ? (
+                <div className="case-story__metrics">
+                  {current.outcome.map((item) => (
+                    <div key={`${item.value ?? ''}-${item.text}`}>
+                      <strong>{item.value}</strong>
+                      <small>{item.text}</small>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ul className="case-story__list" role="list">
+                  {current.outcome.map((item) => (
+                    <li key={item.text}>{item.text}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+            {current.facts.length > 0 ? (
+              <dl className="case-story__facts">
+                {current.facts.map((item) => (
+                  <div key={item.label}>
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+          </div>
         </div>
       </div>
     </section>

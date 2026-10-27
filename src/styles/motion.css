@@ -227,10 +227,10 @@ html.motion-ok .hero__surface::before {
 }
 
 /* ───────────── Для кого: иконки парят, карточка подсвечивается под курсором ───────────── */
-html.motion-ok .audience .audience-card__art {
+html.motion-ok .audience-card__art {
   animation: float-y 6.5s ease-in-out calc(var(--i, 0) * -1.1s) infinite;
 }
-.audience .audience-card::after,
+.audience-card::after,
 .mechanic-card::after,
 .process-step::after {
   content: '';
@@ -372,21 +372,7 @@ html.motion-ok .process__steps[data-in] .process-step__num::after {
 }
 
 /* ───────────── Кейсы: смена задачи и проекта ───────────── */
-html.motion-ok .benefits-list .benefit-row {
-  animation: rise-sm 0.3s ease calc(var(--i, 0) * 40ms) backwards;
-}
-html.motion-ok .case-visual__copy {
-  animation: rise-sm 0.5s ease backwards;
-}
-html.motion-ok .case-visual__meta {
-  animation: fade-in 0.4s ease backwards;
-}
 /* в панели «в стиле бренда» текст лежит прямо в сетке (copy — display: contents), поэтому анимируем его части */
-html.motion-ok .case-visual--brand .case-visual__head,
-html.motion-ok .case-visual--brand .case-facts,
-html.motion-ok .case-visual--brand .case-stats {
-  animation: rise-sm 0.5s ease backwards;
-}
 
 /* ───────────── Конфигуратор ───────────── */
 html.motion-ok .builder-options button.is-selected {

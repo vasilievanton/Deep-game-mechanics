@@ -159,201 +159,121 @@
   --cv-chip-radius: 10px;
 }
 
-/* Deep: тёмная тема сайта (для переключателя проектов) */
-
-/* ═════ 2. Панель кейса ═════
-   Сетка: сверху — заголовок слева и обложка справа, снизу — факты слева и цифры с кнопкой справа.
-   Текст нигде не лежит поверх объектов обложки, поэтому читается на любом бренде.
-   .case-visual__copy превращён в display: contents — его части становятся ячейками общей сетки. */
+/* ═════ 2. Панель клиента ═════
+   Две колонки: слева метка, название проекта и кнопка, справа обложка. Колонки не пересекаются, поэтому
+   текст никогда не ложится на объекты обложки и читается на любом бренде. Левый край обложки растворяется
+   в цвет панели. История проекта («задача → что собрали → итог») лежит под панелью (case-study.css). */
 .case-visual--brand {
   container-type: inline-size;
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-  column-gap: 32px;
-  min-height: 606px;
-  padding: 26px 32px 32px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 440px;
+  overflow: hidden;
+  isolation: isolate;
   border: 0;
   border-radius: var(--cv-radius);
   background: var(--cv-bg);
   color: var(--cv-ink);
   font-family: var(--cv-font);
-  isolation: isolate;
 }
 .case-visual--brand :is(h3, h4, p, dt, dd, strong, small, a, span) {
   font-family: var(--cv-font);
 }
-.case-visual--brand .case-visual__copy {
-  display: contents;
-}
 
-/* — обложка: правый верхний угол, края плавно растворяются в цвет панели — */
+/* — обложка: правая колонка на всю высоту панели — */
 .case-visual--brand .case-visual__art {
   position: relative;
-  inset: auto;
-  grid-area: 1 / 1 / 4 / -1;
-  justify-self: end;
-  align-self: start;
-  width: min(var(--cv-art-w, 86cqw), 780px);
-  height: auto;
-  aspect-ratio: 3 / 2;
-  margin: -26px -32px 0 0;
+  grid-area: 1 / 2 / 4 / 3;
+  min-width: 0;
   background: none;
 }
 .case-visual--brand .case-visual__image {
+  position: absolute;
   inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  -webkit-mask-image:
-    linear-gradient(90deg, transparent 0%, #000 var(--cv-fade-x, 24%)),
-    linear-gradient(
-      180deg,
-      #000 0%,
-      #000 calc(100% - var(--cv-fade-y, 14%)),
-      transparent 100%
-    );
-  mask-image:
-    linear-gradient(90deg, transparent 0%, #000 var(--cv-fade-x, 24%)),
-    linear-gradient(
-      180deg,
-      #000 0%,
-      #000 calc(100% - var(--cv-fade-y, 14%)),
-      transparent 100%
-    );
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-.case-visual--brand .case-visual__shade {
-  display: none;
+  object-position: var(--cv-art-pos, 85% 40%);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 var(--cv-fade-x, 24%)
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 var(--cv-fade-x, 24%)
+  );
 }
 
 /* — метка «КЕЙС • задача» — */
 .case-visual--brand .case-visual__meta {
   position: relative;
-  inset: auto;
+  z-index: 2;
   grid-area: 1 / 1;
   justify-self: start;
   align-self: start;
-  z-index: 1;
   display: inline-flex;
+  max-width: calc(100% - 56px);
   align-items: center;
   gap: 7px;
+  margin: 24px 0 0 28px;
   padding: 8px 13px 7px;
   border: 1px solid var(--cv-chip-line);
   border-radius: var(--cv-chip-radius);
   background: var(--cv-chip-bg);
   color: var(--cv-chip-ink);
-  font: 700 11px/1 var(--cv-font);
+  font: 700 11px/1.25 var(--cv-font);
   letter-spacing: 0.08em;
-  white-space: nowrap;
 }
 .case-visual--brand .case-visual__meta span {
   margin: 0;
   opacity: 0.7;
 }
 
-/* — заголовок — */
+/* — название проекта — */
 .case-visual--brand .case-visual__head {
   position: relative;
   z-index: 1;
-  grid-area: 1 / 1 / 4 / 2;
+  grid-area: 2 / 1;
   align-self: center;
-  margin-top: 56px;
-  /* там, где свечение или небо обложки подходит к строкам, фон вокруг букв мягко возвращается к цвету панели */
-  text-shadow:
-    0 0 5px var(--cv-halo, var(--cv-bg)),
-    0 0 12px var(--cv-halo, var(--cv-bg)),
-    0 0 22px var(--cv-halo, var(--cv-bg));
+  margin: 28px 28px 0;
 }
-.case-visual--brand .case-visual__copy h3 {
-  font-size: var(--cv-h3, clamp(40px, 9.6cqw, 76px));
+.case-visual--brand .case-visual__head h3 {
+  margin: 0;
+  color: var(--cv-ink);
+  font-size: var(--cv-h3, clamp(40px, calc(9cqw - 10px), 96px));
   font-weight: var(--cv-h-weight);
   line-height: 0.98;
   letter-spacing: var(--cv-h-ls);
-  color: var(--cv-ink);
 }
-.case-visual--brand .case-visual__copy h4 {
-  margin-top: 8px;
+.case-visual--brand .case-visual__head h4 {
+  margin: 8px 0 0;
+  color: var(--cv-ink);
   font-size: clamp(18px, 3.5cqw, 30px);
   font-weight: var(--cv-h4-weight);
   line-height: 1.16;
   letter-spacing: -0.015em;
-  color: var(--cv-ink);
 }
 .case-visual--brand .case-visual__head p {
-  max-width: var(--cv-p-w, 300px);
-  margin-top: 14px;
+  max-width: var(--cv-p-w, 420px);
+  margin: 14px 0 0;
   color: var(--cv-ink-2);
   font-size: 15px;
   font-weight: 450;
   line-height: 1.45;
 }
 
-/* — факты (слева внизу) — */
-.case-visual--brand .case-facts {
-  position: relative;
-  z-index: 1;
-  grid-area: 4 / 1 / span 2 / 2;
-  align-self: start;
-  gap: 14px;
-  margin-top: 24px;
-  padding-top: 18px;
-  border-top: 1px solid var(--cv-line);
-}
-.case-visual--brand .case-facts dt {
-  color: var(--cv-ink-2);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  opacity: 0.86;
-}
-.case-visual--brand .case-facts dd {
-  max-width: none;
-  color: var(--cv-ink);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-.case-visual--brand .case-facts__metrics > div {
-  border-right-color: var(--cv-line);
-}
-
-/* — цифры (справа внизу) — */
-.case-visual--brand .case-stats {
-  position: relative;
-  z-index: 1;
-  grid-area: 4 / 2;
-  align-self: start;
-  margin: 24px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--cv-line);
-}
-.case-visual--brand .case-stats div {
-  border-right-color: var(--cv-line);
-}
-.case-visual--brand .case-stats strong {
-  color: var(--cv-accent);
-  font-size: clamp(18px, 3.1cqw, 28px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-.case-visual--brand .case-stats small {
-  max-width: none;
-  color: var(--cv-ink-2);
-  font-size: 12.5px;
-  font-weight: 450;
-}
-
-/* — кнопка (справа внизу под цифрами) — */
+/* — кнопка: в форме и цвете клиента — */
 .case-visual--brand .case-visual__cta {
   position: relative;
-  inset: auto;
   z-index: 2;
-  grid-area: 5 / 2;
+  grid-area: 3 / 1;
   justify-self: start;
-  margin-top: 22px;
+  margin: 24px 28px 28px;
 }
 .case-visual--brand .case-visual__cta .arrow-button {
   min-height: 52px;
@@ -379,56 +299,27 @@
 }
 
 /* ═════ 3. Особенности отдельных обложек ═════ */
-/* МегаФон: катушка выступает слева — обложка чуть меньше, край растворяем раньше */
-.case-visual--brand[data-brand='megafon'] {
-  --cv-art-w: 80cqw;
-  --cv-fade-x: 16%;
-}
-/* HeadHunter: длинное имя — набираем его чуть мельче, а лупа остаётся правее */
-.case-visual--brand[data-brand='hh'] {
-  --cv-art-w: 80cqw;
-  --cv-h3: clamp(36px, 7.6cqw, 62px);
-}
 /* МТС: у медали яркое свечение — край картинки растворяем дальше от текста */
 .case-visual--brand[data-brand='mts'] {
   --cv-fade-x: 32%;
 }
+/* МегаФон: катушка выступает влево — край растворяем раньше */
+.case-visual--brand[data-brand='megafon'] {
+  --cv-fade-x: 16%;
+}
+/* HeadHunter: длинное имя — набираем его мельче, чтобы оно не вылезало из колонки */
+.case-visual--brand[data-brand='hh'] {
+  --cv-h3: clamp(34px, calc(6.6cqw - 8px), 76px);
+}
 /* Zewa: фон — глубокая лазурь (белый текст ≥ 4.5:1). Светлое небо обложки не должно подходить к тексту:
-   полупрозрачный переход «синева → небо» даёт средний тон, на котором не читается ни белый, ни тёмный текст */
+   полупрозрачный переход «синева → небо» даёт средний тон, на котором не читается ни белый, ни тёмный текст,
+   поэтому край обложки растворяем раньше и ниже ставим плотный фон */
 .case-visual--brand[data-brand='zewa'] {
-  --cv-halo: #0d71be;
-  --cv-art-w: 68cqw;
-  --cv-p-w: 270px;
-  --cv-fade-x: 10%;
-  --cv-fade-y: 26%;
+  --cv-fade-x: 22%;
   background: linear-gradient(180deg, #0f78c6 0%, #0a68b3 52%, #0a5ca3 100%);
 }
 
-/* ═════ 4. Средняя ширина панели (ноутбуки): одна колонка снизу ═════ */
-@media (min-width: 801px) and (max-width: 1290px) {
-  .case-visual--brand {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
-  }
-  .case-visual--brand .case-visual__head {
-    grid-area: 1 / 1 / 4 / 2;
-    max-width: 52cqw;
-  }
-  .case-visual--brand .case-visual__head p {
-    max-width: min(var(--cv-p-w, 300px), 46cqw);
-  }
-  .case-visual--brand .case-facts {
-    grid-area: 4 / 1;
-  }
-  .case-visual--brand .case-stats {
-    grid-area: 5 / 1;
-  }
-  .case-visual--brand .case-visual__cta {
-    grid-area: 6 / 1;
-  }
-}
-
-/* ═════ 4b. Телефон: обложка сверху, текст под ней ═════ */
+/* ═════ 4. Телефон: обложка сверху, текст под ней ═════ */
 @media (max-width: 800px) {
   .case-visual--brand {
     grid-template-columns: minmax(0, 1fr);
@@ -436,14 +327,10 @@
     grid-auto-rows: auto;
     align-content: start;
     min-height: 0;
-    padding: 0;
     border-radius: min(var(--cv-radius), 28px);
   }
   .case-visual--brand .case-visual__art {
     grid-area: auto;
-    justify-self: stretch;
-    width: auto;
-    margin: 0;
     aspect-ratio: 3 / 2;
   }
   .case-visual--brand .case-visual__image {
@@ -455,58 +342,33 @@
       transparent 100%
     );
     mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
-    -webkit-mask-composite: source-over;
-    mask-composite: add;
   }
   .case-visual--brand .case-visual__meta {
     position: absolute;
     top: 16px;
     left: 16px;
-    z-index: 2;
     max-width: calc(100% - 32px);
+    margin: 0;
     border-radius: min(var(--cv-chip-radius), 14px);
-    line-height: 1.25;
     white-space: normal;
   }
   .case-visual--brand .case-visual__head {
     grid-area: auto;
-    max-width: none;
     margin: -10px 20px 0;
-    text-shadow: none;
   }
-  .case-visual--brand .case-visual__copy h3 {
+  .case-visual--brand .case-visual__head h3 {
     font-size: var(--cv-h3-m, clamp(40px, 12cqw, 60px));
   }
-  .case-visual--brand .case-visual__copy h4 {
+  .case-visual--brand .case-visual__head h4 {
     font-size: clamp(19px, 5.4cqw, 26px);
   }
   .case-visual--brand .case-visual__head p {
     font-size: 14px;
   }
-  .case-visual--brand .case-facts,
-  .case-visual--brand .case-stats {
-    grid-area: auto;
-    margin: 22px 20px 0;
-  }
-  .case-visual--brand .case-facts__metrics {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .case-visual--brand .case-facts__metrics > div {
-    padding-right: 0;
-    border-right: 0;
-  }
-  .case-visual--brand .case-stats {
-    width: auto;
-  }
-  .case-visual--brand .case-stats small {
-    font-size: 12px;
-  }
   .case-visual--brand .case-visual__cta {
     grid-area: auto;
     justify-self: stretch;
-    margin: 22px 20px 22px;
-    padding: 0;
+    margin: 22px 20px;
   }
   .case-visual--brand .case-visual__cta .arrow-button {
     width: 100%;
@@ -514,7 +376,6 @@
     font-size: 14px;
   }
 }
-
 @media (max-width: 480px) {
   .case-visual--brand .case-visual__art {
     aspect-ratio: 5 / 4;

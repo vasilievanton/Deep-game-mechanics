@@ -337,72 +337,7 @@ html {
 }
 
 /* ───────────── «Для кого»: шесть карточек-ссылок ───────────── */
-.audience .audience-card__link {
-  color: inherit;
-  text-decoration: none;
-}
 /* вся карточка — одна кликабельная зона */
-.audience .audience-card__link::after {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  content: '';
-}
-.audience .audience-card {
-  cursor: pointer;
-}
-.audience .audience-card:has(.audience-card__link:focus-visible) {
-  outline: 2px solid var(--deep-link);
-  outline-offset: 3px;
-}
-.audience .audience-card__link:focus-visible {
-  outline: none;
-}
-.audience .audience-card__more {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 18px;
-  color: var(--deep-link);
-  font-size: 14px;
-  font-weight: 350;
-  line-height: 1.3;
-}
-.audience .audience-card__more .arrow-icon {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 auto;
-  transition: translate 180ms ease;
-}
-.audience .audience-card:hover .audience-card__more .arrow-icon {
-  translate: 4px 0;
-}
-.audience .audience-card:hover h3 {
-  color: #fff;
-}
-
-@media (max-width: 1179px) {
-  .audience .audience-card {
-    grid-template-areas:
-      'title art'
-      'lead lead'
-      'tags tags'
-      'more more';
-  }
-  .audience .audience-card__more {
-    grid-area: more;
-    justify-self: start;
-    margin-top: 14px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .audience .audience-card__more .arrow-icon {
-    transition: none;
-  }
-  .audience .audience-card:hover .audience-card__more .arrow-icon {
-    translate: none;
-  }
-}
 
 /* ───────────── Кейсы: выбор задачи → выбор проекта ───────────── */
 .case-study__examples {
