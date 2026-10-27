@@ -4,6 +4,9 @@ import { mechanicsCatalog, mechanicsLead, sharpImage } from '@/data/landing';
 import { ArrowButton } from '@/components/ui/ArrowButton';
 import { cssVars } from '@/lib/css-vars';
 import MechanicsQuiz from '@/components/sections/MechanicsQuiz';
+import MerchShopDemo, {
+  ShopLauncher,
+} from '@/components/sections/MerchShopDemo';
 
 function iconForMechanic(icon: string) {
   return figmaAssets.mechanicIcons[
@@ -28,6 +31,7 @@ function selectIntegrationsIndex() {
 export default function Mechanics() {
   const [active, setActive] = useState(mechanicIndexFromHash);
   const [quizOpen, setQuizOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
   const current = mechanicsCatalog[active] ?? mechanicsCatalog[0];
 
   useEffect(() => {
@@ -155,6 +159,10 @@ export default function Mechanics() {
               <p>{current.description}</p>
             </div>
           </div>
+          {/* у «Мерч-шопа» есть живое демо: карточка открывает окно с условной витриной */}
+          {current.id === 'shop' ? (
+            <ShopLauncher onOpen={() => setShopOpen(true)} />
+          ) : null}
           <div className="mechanic-detail__body">
             <span className="mechanic-detail__label">Возможности</span>
             <ul key={current.id}>
@@ -174,6 +182,12 @@ export default function Mechanics() {
         <MechanicsQuiz
           onClose={() => setQuizOpen(false)}
           onPick={(index) => setActive(index)}
+        />
+      )}
+      {shopOpen && (
+        <MerchShopDemo
+          accent={current.accent}
+          onClose={() => setShopOpen(false)}
         />
       )}
     </section>

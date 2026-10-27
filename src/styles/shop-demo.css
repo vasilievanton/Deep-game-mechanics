@@ -1,0 +1,657 @@
+/* ───────────── Мерч-шоп: демо-витрина ─────────────
+   Карточка «Попробуйте витрину» в панели механики «Мерч-шоп» и окно с условным магазином
+   (MerchShopDemo): выбор товара, обмен баллов, остаток, лимит «в одни руки», список заказов.
+   Цвет — акцент механики (data-accent на панели и на .shop-demo), поэтому всё берёт --accent и
+   --accent-rgb. Общая подложка и панель окна (.dialog-*) лежат в forms.css, поэтому этот файл
+   подключается после него. Анимации включает html.motion-ok: без него и при
+   prefers-reduced-motion всё появляется сразу. */
+
+/* цвет «вырезов» в иконках товаров: тёмный, с каплей акцента — как фон плитки под иконкой */
+.shop-launch-wrap,
+.shop-demo {
+  --shop-ink: #17131f;
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  .shop-launch-wrap,
+  .shop-demo {
+    --shop-ink: color-mix(in srgb, var(--accent) 14%, #0f0f10);
+  }
+}
+
+/* ───────────── Карточка-кнопка в панели «Мерч-шоп» ───────────── */
+.shop-launch-wrap {
+  margin-top: 20px;
+}
+.shop-launch {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgb(var(--accent-rgb) / 0.4);
+  border-radius: 12px;
+  background: rgb(var(--accent-rgb) / 0.09);
+  color: var(--deep-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+.shop-launch:hover {
+  border-color: var(--accent);
+  background: rgb(var(--accent-rgb) / 0.16);
+}
+.shop-launch:focus-visible {
+  outline: 2px solid var(--deep-link);
+  outline-offset: 3px;
+}
+.shop-launch__glyphs {
+  display: flex;
+  gap: 6px;
+}
+.shop-launch__tile {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgb(var(--accent-rgb) / 0.34);
+  border-radius: 10px;
+  background: rgb(var(--accent-rgb) / 0.14);
+  color: var(--accent);
+  transition: translate 220ms cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.shop-launch__tile svg {
+  width: 26px;
+  height: 26px;
+}
+.shop-launch__copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.shop-launch__copy strong {
+  font: 400 16px/1.25 var(--font-mono);
+  letter-spacing: -0.02em;
+}
+.shop-launch__copy span {
+  color: var(--deep-muted);
+  font: 400 13px/1.4 var(--font-text, var(--font-mono));
+}
+.shop-launch__go {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgb(var(--accent-rgb) / 0.22);
+  color: #fff;
+  transition:
+    translate 200ms ease,
+    background-color 180ms ease;
+}
+.shop-launch__go .arrow-icon {
+  width: 18px;
+  height: 18px;
+}
+.shop-launch:hover .shop-launch__go {
+  background: var(--accent);
+  color: #0f0f10;
+}
+html.motion-ok .shop-launch-wrap {
+  animation: rise-sm 0.45s ease 0.12s backwards;
+}
+@media (hover: hover) {
+  html.motion-ok .shop-launch:hover .shop-launch__go {
+    translate: 2px 0;
+  }
+  html.motion-ok .shop-launch:hover .shop-launch__tile {
+    translate: 0 -2px;
+  }
+  html.motion-ok .shop-launch:hover .shop-launch__tile:nth-child(2) {
+    transition-delay: 50ms;
+  }
+  html.motion-ok .shop-launch:hover .shop-launch__tile:nth-child(3) {
+    transition-delay: 100ms;
+  }
+}
+
+/* ───────────── Окно ───────────── */
+.shop-dialog {
+  width: min(100%, 600px);
+}
+/* на широких экранах поля окна чуть меньше общих: так оно целиком помещается и на невысоких ноутбуках */
+@media (min-width: 601px) {
+  .shop-dialog {
+    padding-top: 22px;
+    padding-bottom: 18px;
+  }
+}
+.shop-demo__kicker {
+  margin: 0 40px 6px 0;
+  color: var(--accent);
+  font: 600 11px/1.3 var(--font-text, var(--font-mono));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* баланс */
+.shop-demo__wallet {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 8px 16px;
+  border: 1px solid rgb(var(--accent-rgb) / 0.3);
+  border-radius: 12px;
+  background: rgb(var(--accent-rgb) / 0.08);
+}
+.shop-demo__wallet-label {
+  color: var(--deep-text-soft);
+  font: 400 14px/1.3 var(--font-text, var(--font-mono));
+}
+.shop-demo__wallet-value {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.shop-demo__wallet-value strong {
+  color: #fff;
+  font: 400 24px/1.1 var(--font-mono);
+  letter-spacing: -0.04em;
+}
+/* «−280» всплывает слева от баланса и гаснет: layout не двигается */
+.shop-demo__delta {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 12px);
+  translate: 0 -50%;
+  color: var(--c-coral);
+  font: 400 18px/1 var(--font-mono);
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+html.motion-ok .shop-demo__delta {
+  animation: shop-delta 2.2s ease both;
+}
+@keyframes shop-delta {
+  0% {
+    opacity: 0;
+    translate: 10px -50%;
+  }
+  14% {
+    opacity: 1;
+    translate: 0 -50%;
+  }
+  72% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 calc(-50% - 8px);
+  }
+}
+
+/* монетка «балла» */
+.shop-demo__coin {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 34% 30%,
+      rgb(255 255 255 / 0.55),
+      transparent 46%
+    ),
+    var(--accent);
+  box-shadow: 0 0 10px rgb(var(--accent-rgb) / 0.5);
+}
+.shop-demo__coin::after {
+  content: '';
+  position: absolute;
+  inset: 3.5px;
+  border: 1.5px solid rgb(255 255 255 / 0.5);
+  border-radius: 50%;
+}
+.shop-demo__coin--lg {
+  width: 22px;
+  height: 22px;
+}
+.shop-demo__coin--lg::after {
+  inset: 5.5px;
+}
+
+/* ───────────── Витрина ───────────── */
+.shop-demo__fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.shop-demo__catalog {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.shop-demo__item {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.shop-demo__item:not([data-state='ok']) {
+  cursor: not-allowed;
+}
+.shop-demo__item input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.shop-demo__card {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  height: 100%;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--deep-border-2);
+  border-radius: 12px;
+  background: var(--deep-canvas);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 200ms ease,
+    translate 200ms ease;
+}
+/* верхняя строка: иконка слева, цена справа */
+.shop-demo__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.shop-demo__glyph {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgb(var(--accent-rgb) / 0.34);
+  border-radius: 12px;
+  background: rgb(var(--accent-rgb) / 0.14);
+  color: var(--accent);
+  transition: opacity 160ms ease;
+}
+.shop-demo__glyph svg {
+  width: 30px;
+  height: 30px;
+}
+.shop-demo__price {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding-top: 4px;
+  color: #fff;
+  font: 400 18px/1 var(--font-mono);
+  letter-spacing: -0.03em;
+}
+/* вторая строка: название и кружок выбора */
+.shop-demo__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 22px; /* высота кружка: у недоступных карточек его нет, а строки должны совпасть */
+}
+.shop-demo__name {
+  min-width: 0;
+  color: var(--deep-text);
+  font: 400 17px/1.25 var(--font-mono);
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+.shop-demo__meta,
+.shop-demo__rule {
+  font: 400 13px/1.4 var(--font-text, var(--font-mono));
+}
+.shop-demo__meta {
+  color: var(--deep-muted);
+}
+.shop-demo__meta.is-low {
+  color: var(--c-amber);
+}
+.shop-demo__rule {
+  color: var(--deep-muted);
+}
+.shop-demo__rule:empty {
+  display: none;
+}
+
+/* кружок-«радио»: выбранный товар виден не только цветом, но и галочкой */
+.shop-demo__tick {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 3px;
+  border: 2px solid #4a4c53;
+  border-radius: 50%;
+  color: transparent;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+/* наведение — только на то, что можно взять */
+@media (hover: hover) {
+  .shop-demo__item[data-state='ok']
+    input:not(:checked):hover
+    + .shop-demo__card {
+    border-color: rgb(var(--accent-rgb) / 0.55);
+    background: var(--deep-surface-2);
+  }
+  .shop-demo__item[data-state='ok']
+    input:not(:checked):hover
+    + .shop-demo__card
+    .shop-demo__tick {
+    border-color: #6b6e77;
+  }
+  html.motion-ok
+    .shop-demo__item[data-state='ok']
+    input:not(:checked):hover
+    + .shop-demo__card {
+    translate: 0 -2px;
+  }
+}
+.shop-demo__item input:checked + .shop-demo__card {
+  border-color: var(--accent);
+  background: rgb(var(--accent-rgb) / 0.12);
+  box-shadow: 0 10px 30px rgb(var(--accent-rgb) / 0.16);
+}
+.shop-demo__item input:checked + .shop-demo__card .shop-demo__tick {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #0f0f10;
+}
+.shop-demo__item input:focus-visible + .shop-demo__card {
+  outline: 2px solid var(--deep-link);
+  outline-offset: 2px;
+}
+
+/* нельзя взять: не хватает баллов, лимит, нет на складе */
+.shop-demo__item:not([data-state='ok']) .shop-demo__card {
+  border-color: var(--deep-border);
+  background: transparent;
+}
+.shop-demo__item:not([data-state='ok']) .shop-demo__glyph {
+  opacity: 0.5;
+}
+.shop-demo__item:not([data-state='ok']) .shop-demo__coin {
+  opacity: 0.5;
+  box-shadow: none;
+}
+.shop-demo__item:not([data-state='ok']) .shop-demo__name,
+.shop-demo__item:not([data-state='ok']) .shop-demo__price {
+  color: var(--deep-muted);
+}
+.shop-demo__item:not([data-state='ok']) .shop-demo__tick {
+  display: none;
+}
+.shop-demo__item[data-state='short'] .shop-demo__rule {
+  color: var(--c-coral);
+}
+.shop-demo__item[data-state='limit'] .shop-demo__rule {
+  color: var(--c-amber);
+}
+
+/* ───────────── Действие: подсказка и кнопка ───────────── */
+.shop-demo__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+}
+.shop-demo__hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  color: var(--deep-text-soft);
+  font: 400 14px/1.45 var(--font-text, var(--font-mono));
+}
+.shop-demo__hint.is-done {
+  color: var(--c-green);
+}
+.shop-demo__buy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 190px;
+  min-height: 52px;
+  margin: 0;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: var(--deep-radius-btn);
+  background: var(--deep-primary);
+  color: #fff;
+  font: 350 17px/1.25 var(--font-mono);
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    opacity 160ms ease;
+}
+.shop-demo__buy:hover {
+  background: var(--deep-primary-hover);
+}
+.shop-demo__buy:active {
+  background: var(--deep-primary-press);
+}
+.shop-demo__buy:focus-visible {
+  outline: 2px solid var(--deep-link);
+  outline-offset: 3px;
+}
+/* неактивная кнопка остаётся фокусируемой (aria-disabled), поэтому приглушаем цвета, а не opacity:
+   иначе кольцо фокуса на ней тоже бледнеет */
+.shop-demo__buy[aria-disabled='true'] {
+  background: #0c235b;
+  color: #8f94a3;
+  cursor: not-allowed;
+}
+
+/* ───────────── Заказы ───────────── */
+.shop-demo__orders {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--deep-border-2);
+}
+.shop-demo__orders-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.shop-demo__orders-title {
+  margin: 0;
+  color: var(--deep-muted);
+  font: 600 11px/1.3 var(--font-text, var(--font-mono));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+/* зона нажатия шире текста, но не за правый край блока: иначе окно получит лишнюю ширину */
+.shop-demo__reset {
+  margin: -6px 0;
+  padding: 6px 0 6px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--deep-link);
+  font: 400 13px/1.3 var(--font-text, var(--font-mono));
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+.shop-demo__reset:hover {
+  color: #fff;
+}
+.shop-demo__reset:focus-visible {
+  outline: 2px solid var(--deep-link);
+  outline-offset: 2px;
+}
+.shop-demo__reset[aria-disabled='true'],
+.shop-demo__reset[aria-disabled='true']:hover {
+  color: rgb(108 149 255 / 0.45);
+  cursor: default;
+}
+.shop-demo__list {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* пустое место под заказ — как ячейка инвентаря; высота та же, что у заказа */
+.shop-demo__slot {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px dashed var(--deep-border-2);
+  border-radius: 10px;
+  color: var(--deep-muted);
+  font: 400 13px/1.4 var(--font-text, var(--font-mono));
+}
+.shop-demo__order {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--deep-border-2);
+  border-radius: 10px;
+  background: var(--deep-canvas);
+}
+html.motion-ok .shop-demo__order {
+  animation: rise-sm 0.35s ease both;
+}
+.shop-demo__order-name {
+  min-width: 0;
+  color: var(--deep-text);
+  font: 400 15px/1.3 var(--font-mono);
+  letter-spacing: -0.02em;
+}
+.shop-demo__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--c-green);
+  font: 400 12px/1.2 var(--font-text, var(--font-mono));
+}
+.shop-demo__status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.shop-demo__order-sum {
+  min-width: 52px;
+  color: var(--deep-text-soft);
+  font: 400 15px/1.3 var(--font-mono);
+  text-align: right;
+}
+.shop-demo__note {
+  margin: 10px 0 0;
+  color: var(--deep-muted);
+  font: 400 12px/1.5 var(--font-text, var(--font-mono));
+}
+
+/* ───────────── Телефон ───────────── */
+@media (max-width: 600px) {
+  .shop-launch {
+    gap: 12px;
+    padding: 12px;
+  }
+  .shop-launch__tile {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+  .shop-launch__tile svg {
+    width: 23px;
+    height: 23px;
+  }
+  .shop-demo__wallet {
+    margin: 14px 0 12px;
+    padding: 9px 14px;
+  }
+  .shop-demo__catalog {
+    gap: 8px;
+  }
+  .shop-demo__card {
+    padding: 10px 11px 12px;
+  }
+  .shop-demo__top {
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .shop-demo__glyph {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+  }
+  .shop-demo__glyph svg {
+    width: 28px;
+    height: 28px;
+  }
+  .shop-demo__price {
+    gap: 6px;
+    font-size: 16px;
+  }
+  .shop-demo__name {
+    font-size: 15px;
+  }
+  .shop-demo__bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .shop-demo__buy {
+    width: 100%;
+  }
+  .shop-demo__order {
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .shop-demo__slot {
+    padding: 0 12px;
+  }
+  .shop-demo__order-sum {
+    min-width: 44px;
+  }
+}
+/* на самых узких экранах итоговая фраза переносится на вторую строку: место под неё держим заранее */
+@media (max-width: 380px) {
+  .shop-demo__hint {
+    min-height: calc(2 * 1.45em);
+  }
+}
+/* совсем узко: в карточке-кнопке остаются две плитки, чтобы поместился текст */
+@media (max-width: 400px) {
+  .shop-launch__tile:nth-child(3) {
+    display: none;
+  }
+}
